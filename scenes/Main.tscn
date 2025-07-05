@@ -1,0 +1,151 @@
+[gd_scene load_steps=12 format=3 uid="uid://4r8qvx2odoep"]
+
+[ext_resource type="Script" uid="uid://ba4823pre2yl7" path="res://scripts/main.gd" id="1_rgh2o"]
+[ext_resource type="LabelSettings" uid="uid://dcrxj6ropvsma" path="res://ui/LabelSettings/GameUILabelSettings.tres" id="2_50glp"]
+[ext_resource type="PackedScene" uid="uid://bnd1l3v1he3d7" path="res://Peg.tscn" id="2_idj7w"]
+[ext_resource type="PackedScene" uid="uid://ds3ukvdoyjlnv" path="res://Wall.tscn" id="2_kln2b"]
+[ext_resource type="Theme" uid="uid://du2jkyh4el8aw" path="res://ui/GameSceneTheme.tres" id="2_vy5pj"]
+[ext_resource type="LabelSettings" uid="uid://cpd6oxhesfn23" path="res://ui/LabelSettings/GameUISmallLabel.tres" id="3_lhr70"]
+[ext_resource type="Script" uid="uid://c4ixlg1xsbgh6" path="res://scripts/layout.gd" id="5_pbw6q"]
+[ext_resource type="Texture2D" uid="uid://btdwmjhr4rc0q" path="res://walls.png" id="6_jw32o"]
+[ext_resource type="PackedScene" uid="uid://p1vcve4ffcxb" path="res://Cup.tscn" id="6_v1gob"]
+[ext_resource type="PackedScene" uid="uid://dmwil22dm8e3l" path="res://Cannon.tscn" id="7_jw32o"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_pbw6q"]
+distance = 13.0
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_rgh2o")
+
+[node name="UI" type="CenterContainer" parent="."]
+offset_left = 1388.0
+offset_right = 2129.0
+offset_bottom = 752.0
+
+[node name="GameInfo" type="VBoxContainer" parent="UI"]
+layout_mode = 2
+theme = ExtResource("2_vy5pj")
+
+[node name="Money" type="Label" parent="UI/GameInfo"]
+layout_mode = 2
+text = "Money this round: $0"
+label_settings = ExtResource("3_lhr70")
+
+[node name="Balls" type="Label" parent="UI/GameInfo"]
+layout_mode = 2
+text = "Balls: 3"
+label_settings = ExtResource("3_lhr70")
+
+[node name="QuickRestartButton" type="Button" parent="UI/GameInfo"]
+layout_mode = 2
+theme = ExtResource("2_vy5pj")
+text = "Quick Restart"
+
+[node name="Balls" type="Label" parent="UI/GameInfo/QuickRestartButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -215.0
+offset_top = -35.0
+offset_right = 215.0
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Quick Restart"
+label_settings = ExtResource("2_50glp")
+horizontal_alignment = 1
+
+[node name="UpgradesButton" type="Button" parent="UI/GameInfo"]
+layout_mode = 2
+theme = ExtResource("2_vy5pj")
+theme_type_variation = &"Upgrade"
+text = "Upgrades"
+
+[node name="Balls" type="Label" parent="UI/GameInfo/UpgradesButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -215.0
+offset_top = -35.0
+offset_right = 215.0
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Upgrades"
+label_settings = ExtResource("2_50glp")
+horizontal_alignment = 1
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
+zoom = Vector2(0.9, 0.9)
+
+[node name="Board" type="Node2D" parent="."]
+position = Vector2(-347, 30)
+
+[node name="Walls" type="Sprite2D" parent="Board"]
+position = Vector2(1044, 629)
+texture = ExtResource("6_jw32o")
+
+[node name="Wall" parent="Board" instance=ExtResource("2_kln2b")]
+position = Vector2(410, 132)
+
+[node name="Wall2" parent="Board" instance=ExtResource("2_kln2b")]
+position = Vector2(1748, 132)
+
+[node name="Layout" type="Node2D" parent="Board"]
+position = Vector2(415, 285)
+script = ExtResource("5_pbw6q")
+peg_scene = ExtResource("2_idj7w")
+pegs_per_column = 10
+num_rows = 8
+horizontal_spacing = 140.0
+vertical_spacing = 100.0
+
+[node name="Floor" type="StaticBody2D" parent="Board"]
+position = Vector2(-8, 155)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Board/Floor"]
+position = Vector2(995, 1047)
+shape = SubResource("WorldBoundaryShape2D_pbw6q")
+
+[node name="Cups" type="Node2D" parent="Board"]
+position = Vector2(-13, 107)
+
+[node name="Cup" parent="Board/Cups" instance=ExtResource("6_v1gob")]
+position = Vector2(483, 998)
+
+[node name="Cup2" parent="Board/Cups" instance=ExtResource("6_v1gob")]
+position = Vector2(648.5, 998)
+
+[node name="Cup3" parent="Board/Cups" instance=ExtResource("6_v1gob")]
+position = Vector2(813.5, 998)
+
+[node name="Cup4" parent="Board/Cups" instance=ExtResource("6_v1gob")]
+position = Vector2(975.5, 998)
+
+[node name="Cup5" parent="Board/Cups" instance=ExtResource("6_v1gob")]
+position = Vector2(1138.5, 998)
+
+[node name="Cup6" parent="Board/Cups" instance=ExtResource("6_v1gob")]
+position = Vector2(1304.5, 998)
+
+[node name="Cup7" parent="Board/Cups" instance=ExtResource("6_v1gob")]
+position = Vector2(1466.5, 998)
+
+[node name="Cup8" parent="Board/Cups" instance=ExtResource("6_v1gob")]
+position = Vector2(1628.5, 998)
+
+[node name="Cup9" parent="Board/Cups" instance=ExtResource("6_v1gob")]
+visible = false
+position = Vector2(1770.5, 998)
+
+[node name="Cannon" parent="Board" instance=ExtResource("7_jw32o")]
+position = Vector2(1070, 51)
+
+[node name="BallsContainer" type="Node2D" parent="."]

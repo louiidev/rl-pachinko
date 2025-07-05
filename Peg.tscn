@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://bnd1l3v1he3d7"]
+
+[ext_resource type="Script" uid="uid://di0ofxe1lvlu3" path="res://scripts/peg.gd" id="1_4twx5"]
+[ext_resource type="Texture2D" uid="uid://dq6ognlcrqvic" path="res://peg.png" id="1_ulx75"]
+[ext_resource type="Script" uid="uid://b1nrdkd3n8wy8" path="res://scripts/shake.gd" id="3_bgr1e"]
+[ext_resource type="LabelSettings" uid="uid://cgxq5mw10evav" path="res://ui/LabelSettings/UpgradeNodeLabelSettings.tres" id="4_prgfs"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ulx75"]
+friction = 0.5
+bounce = 0.75
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_r150o"]
+radius = 12.5
+
+[node name="Peg" type="StaticBody2D"]
+collision_layer = 4
+physics_material_override = SubResource("PhysicsMaterial_ulx75")
+script = ExtResource("1_4twx5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.76, 0.76)
+shape = SubResource("CircleShape2D_r150o")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(0, 10)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("1_ulx75")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("1_ulx75")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+scale = Vector2(0.76, 0.76)
+shape = SubResource("CircleShape2D_r150o")
+
+[node name="Shake" type="Node2D" parent="." node_paths=PackedStringArray("node_to_shake")]
+script = ExtResource("3_bgr1e")
+random_strength_range = 2.5
+shake_fade = 13.0
+node_to_shake = NodePath("../Sprite2D")
+
+[node name="PrizeLabel" type="Label" parent="."]
+offset_left = -21.0
+offset_top = -74.0
+offset_right = 21.0
+offset_bottom = -32.0
+text = "$0"
+label_settings = ExtResource("4_prgfs")
