@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3 uid="uid://cx7stidp768o"]
+
+[ext_resource type="Script" uid="uid://y3mjola2ca4a" path="res://scripts/transition.gd" id="1_h742l"]
+[ext_resource type="Shader" uid="uid://d1nfubn857qf" path="res://shaders/Transition.gdshader" id="2_3mf5h"]
+[ext_resource type="LabelSettings" uid="uid://dl3qeb1fakk4f" path="res://ui/LabelSettings/TransitionNodeLabelSettings.tres" id="3_gkwsl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gkwsl"]
+shader = ExtResource("2_3mf5h")
+shader_parameter/circle_size = 0.6
+
+[node name="Transition" type="CenterContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 960.0
+offset_top = 480.0
+offset_right = 960.0
+offset_bottom = 1320.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+use_top_left = true
+script = ExtResource("1_h742l")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_gkwsl")
+custom_minimum_size = Vector2(1920, 1920)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="ColorRect"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -35.0
+offset_right = 140.0
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(138, 27)
+text = "UPGRADES"
+label_settings = ExtResource("3_gkwsl")
+horizontal_alignment = 1
+vertical_alignment = 1

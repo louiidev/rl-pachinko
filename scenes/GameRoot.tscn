@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://cq50rgvn4uxnv"]
+
+[ext_resource type="Script" uid="uid://dancjusrisc78" path="res://scripts/game_root_controller.gd" id="1_8ao7o"]
+[ext_resource type="PackedScene" uid="uid://cx7stidp768o" path="res://prefabs/Transition.tscn" id="2_lkoyb"]
+
+[node name="GameRoot" type="Node2D"]
+script = ExtResource("1_8ao7o")
+
+[node name="CurrentScene" type="Node2D" parent="."]
+
+[node name="Transition" parent="." instance=ExtResource("2_lkoyb")]
+z_index = 100
+offset_bottom = 480.0

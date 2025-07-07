@@ -1,0 +1,73 @@
+[gd_scene load_steps=8 format=3 uid="uid://ddceknw0yy6ty"]
+
+[ext_resource type="Texture2D" uid="uid://btdwmjhr4rc0q" path="res://walls.png" id="1_tyj1f"]
+[ext_resource type="PackedScene" uid="uid://ds3ukvdoyjlnv" path="res://Wall.tscn" id="2_82hpv"]
+[ext_resource type="Script" uid="uid://c4ixlg1xsbgh6" path="res://scripts/layout.gd" id="3_vh7qr"]
+[ext_resource type="PackedScene" uid="uid://bnd1l3v1he3d7" path="res://Peg.tscn" id="4_u6leh"]
+[ext_resource type="PackedScene" uid="uid://p1vcve4ffcxb" path="res://Cup.tscn" id="5_odh72"]
+[ext_resource type="PackedScene" uid="uid://dmwil22dm8e3l" path="res://Cannon.tscn" id="6_2u1bp"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_pbw6q"]
+distance = 13.0
+
+[node name="Board" type="Node2D"]
+
+[node name="Walls" type="Sprite2D" parent="."]
+position = Vector2(1044, 521)
+texture = ExtResource("1_tyj1f")
+
+[node name="Wall" parent="." instance=ExtResource("2_82hpv")]
+position = Vector2(410, 132)
+
+[node name="Wall2" parent="." instance=ExtResource("2_82hpv")]
+position = Vector2(1748, 132)
+
+[node name="Layout" type="Node2D" parent="."]
+position = Vector2(415, 318)
+script = ExtResource("3_vh7qr")
+peg_scene = ExtResource("4_u6leh")
+pegs_per_column = 10
+num_rows = 6
+horizontal_spacing = 140.0
+vertical_spacing = 100.0
+
+[node name="Floor" type="StaticBody2D" parent="."]
+position = Vector2(-8, 155)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+position = Vector2(995, 1047)
+shape = SubResource("WorldBoundaryShape2D_pbw6q")
+
+[node name="Cups" type="Node2D" parent="."]
+position = Vector2(-13, -3)
+
+[node name="Cup" parent="Cups" instance=ExtResource("5_odh72")]
+position = Vector2(496, 998)
+
+[node name="Cup2" parent="Cups" instance=ExtResource("5_odh72")]
+position = Vector2(660.5, 998)
+
+[node name="Cup3" parent="Cups" instance=ExtResource("5_odh72")]
+position = Vector2(819.5, 998)
+
+[node name="Cup4" parent="Cups" instance=ExtResource("5_odh72")]
+position = Vector2(977.5, 998)
+
+[node name="Cup5" parent="Cups" instance=ExtResource("5_odh72")]
+position = Vector2(1138.5, 998)
+
+[node name="Cup6" parent="Cups" instance=ExtResource("5_odh72")]
+position = Vector2(1304.5, 998)
+
+[node name="Cup7" parent="Cups" instance=ExtResource("5_odh72")]
+position = Vector2(1466.5, 998)
+
+[node name="Cup8" parent="Cups" instance=ExtResource("5_odh72")]
+position = Vector2(1628.5, 998)
+
+[node name="Cup9" parent="Cups" instance=ExtResource("5_odh72")]
+visible = false
+position = Vector2(1770.5, 998)
+
+[node name="Cannon" parent="." instance=ExtResource("6_2u1bp")]
+position = Vector2(1070, 47)

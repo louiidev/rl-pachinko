@@ -14,17 +14,13 @@ class_name Layout extends Node2D
 
 func _ready() -> void:
 	_clear_existing_pegs()
-	spawn_pachinko_pegs(pegs_per_column, num_rows, horizontal_spacing, vertical_spacing, )
+	spawn_pachinko_pegs()
 
 
 # Function to create a pachinko grid layout
 # Returns an array of Vector2 positions for the pegs
 func create_pachinko_grid(
-	pegs_per_column: int,
-	num_rows: int,
-	horizontal_spacing: float,
-	vertical_spacing: float,
-	start_position: Vector2 = Vector2.ZERO
+
 ) -> Array[Vector2]:
 	
 	var peg_positions: Array[Vector2] = []
@@ -55,19 +51,11 @@ func create_pachinko_grid(
 
 # Example usage function that creates actual peg nodes
 func spawn_pachinko_pegs(
-	pegs_per_column: int,
-	num_rows: int,
-	horizontal_spacing: float,
-	vertical_spacing: float,
-	start_position: Vector2 = Vector2.ZERO
+
 ):
 	# Get the grid positions
 	var positions = create_pachinko_grid(
-		pegs_per_column, 
-		num_rows, 
-		horizontal_spacing, 
-		vertical_spacing, 
-		start_position
+
 	)
 	
 	# Create peg instances at each position
@@ -93,7 +81,7 @@ func _generate_grid(value):
 			print("Error: No peg scene assigned! Please assign a PackedScene to 'Peg Scene' in the inspector.")
 			return
 		_clear_existing_pegs()
-		spawn_pachinko_pegs(pegs_per_column, num_rows, horizontal_spacing, vertical_spacing )
+		spawn_pachinko_pegs()
 
 func _clear_grid(value):
 	if value and Engine.is_editor_hint():

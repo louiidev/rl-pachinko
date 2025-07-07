@@ -1,10 +1,32 @@
-[gd_scene load_steps=6 format=3 uid="uid://cvsftdpu2pmus"]
+[gd_scene load_steps=28 format=3 uid="uid://cvsftdpu2pmus"]
 
 [ext_resource type="PackedScene" uid="uid://cmqq5tee3t843" path="res://ui/UpgradeNode.tscn" id="1_db6p7"]
 [ext_resource type="Script" uid="uid://do5jhdpambdu" path="res://scripts/upgrades_scene.gd" id="1_o3c8l"]
 [ext_resource type="Theme" uid="uid://du2jkyh4el8aw" path="res://ui/GameSceneTheme.tres" id="2_hunyf"]
 [ext_resource type="LabelSettings" uid="uid://dcrxj6ropvsma" path="res://ui/LabelSettings/GameUILabelSettings.tres" id="2_sqcr3"]
 [ext_resource type="LabelSettings" uid="uid://cpd6oxhesfn23" path="res://ui/LabelSettings/GameUISmallLabel.tres" id="4_1qsbe"]
+[ext_resource type="Script" uid="uid://cik52rhd1w27g" path="res://scripts/button_shaker.gd" id="4_jtjne"]
+[ext_resource type="Script" uid="uid://bttbimes54k4a" path="res://scripts/ui_shaker.gd" id="4_os0qy"]
+[ext_resource type="Texture2D" uid="uid://d21285ecfpxf7" path="res://customer.png" id="8_jwdw3"]
+[ext_resource type="Texture2D" uid="uid://x1g18ke04r4f" path="res://icons/potatochip_green.png" id="9_qk3q1"]
+[ext_resource type="Texture2D" uid="uid://bak7a3w4dnkou" path="res://icons/extra-balls.png" id="9_ws61t"]
+[ext_resource type="Texture2D" uid="uid://cpb5me21ldg2e" path="res://icons/prizes-claimed-amount.png" id="10_4jcny"]
+[ext_resource type="Texture2D" uid="uid://2n66gux860ds" path="res://icons/pegs-prize-claimed-amount.png" id="10_hxoeu"]
+[ext_resource type="Texture2D" uid="uid://ctp2mcn56qkna" path="res://icons/decor.png" id="10_iypik"]
+[ext_resource type="Texture2D" uid="uid://kmk6lsjoka3u" path="res://icons/bronzeballs.png" id="10_t60i8"]
+[ext_resource type="Texture2D" uid="uid://cihdt41avsnfo" path="res://icons/pegs-can-have-prizes.png" id="10_ynu60"]
+[ext_resource type="Texture2D" uid="uid://djipi0a1i21ru" path="res://icons/silverballs.png" id="11_aoq7x"]
+[ext_resource type="Texture2D" uid="uid://cl7hijhhqyo6c" path="res://icons/pegs-prize-amount.png" id="11_mgk3p"]
+[ext_resource type="Texture2D" uid="uid://clvs23glv334r" path="res://icons/vip.png" id="11_s5gr3"]
+[ext_resource type="Texture2D" uid="uid://ewa2xmccu6ka" path="res://icons/chance-respawn-ball.png" id="11_y7x7c"]
+[ext_resource type="Texture2D" uid="uid://jris4ysmxbms" path="res://icons/goldballs.png" id="12_1lmaf"]
+[ext_resource type="Texture2D" uid="uid://cayah2v38qk1l" path="res://icons/new-machines.png" id="12_o53fm"]
+[ext_resource type="Texture2D" uid="uid://bo05trpdo44vu" path="res://icons/diamondballs.png" id="13_qk3q1"]
+[ext_resource type="Texture2D" uid="uid://bclh2le8ol7my" path="res://icons/max-prize-percentage-amount.png" id="14_dbmu8"]
+[ext_resource type="Texture2D" uid="uid://bb0epj3jqdvo3" path="res://icons/platballs.png" id="14_iypik"]
+[ext_resource type="Texture2D" uid="uid://bnvanjgr7b838" path="res://icons/chance-to-split-ball-peg.png" id="15_bk4jg"]
+[ext_resource type="Texture2D" uid="uid://bmvjcgxn2q2rw" path="res://icons/plus-min-rewards-per-level.png" id="17_hrb1w"]
+[ext_resource type="Texture2D" uid="uid://dxjuocts1e2ip" path="res://icons/chance-ball-spawns-on-miss.png" id="20_1lmaf"]
 
 [node name="Upgrades" type="Node2D"]
 script = ExtResource("1_o3c8l")
@@ -12,8 +34,9 @@ script = ExtResource("1_o3c8l")
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 1
 theme = ExtResource("2_hunyf")
 
 [node name="CenterContainer" type="CenterContainer" parent="UI"]
@@ -28,25 +51,56 @@ label_settings = ExtResource("2_sqcr3")
 
 [node name="CenterContainer2" type="CenterContainer" parent="UI"]
 layout_mode = 1
-offset_top = 779.0
+offset_top = 860.0
 offset_right = 1920.0
 offset_bottom = 1079.0
 
-[node name="Button" type="Button" parent="UI/CenterContainer2"]
+[node name="Control" type="Control" parent="UI/CenterContainer2"]
 layout_mode = 2
-text = "PACHINKO!"
 
-[node name="Label" type="Label" parent="UI/CenterContainer2"]
+[node name="Button" type="Button" parent="UI/CenterContainer2/Control"]
 layout_mode = 2
+offset_left = -198.0
+offset_top = -85.0
+offset_right = 197.0
+offset_bottom = 85.0
+pivot_offset = Vector2(194, 78)
+mouse_default_cursor_shape = 2
+text = "PACHINKO!"
+script = ExtResource("4_jtjne")
+
+[node name="Label" type="Label" parent="UI/CenterContainer2/Control/Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -147.5
+offset_top = -35.0
+offset_right = 147.5
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "PACHINKO!"
 label_settings = ExtResource("2_sqcr3")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Shaker" type="Control" parent="UI/CenterContainer2/Control/Button" node_paths=PackedStringArray("target")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("4_os0qy")
+target = NodePath("..")
 
 [node name="CenterContainer3" type="CenterContainer" parent="UI"]
 layout_mode = 0
-offset_left = 5.0
-offset_top = 849.0
+offset_left = 239.0
+offset_top = 860.0
 offset_right = 759.0
-offset_bottom = 1013.0
+offset_bottom = 1079.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/CenterContainer3"]
 layout_mode = 2
@@ -64,78 +118,247 @@ label_settings = ExtResource("4_1qsbe")
 [node name="UpgradeNodes" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 364.0
-offset_right = 404.0
-offset_bottom = 40.0
+offset_left = 339.0
+offset_top = -155.0
+offset_right = 1839.0
+offset_bottom = 645.0
+mouse_filter = 1
 
 [node name="Customers" parent="UpgradeNodes" node_paths=PackedStringArray("next_nodes") instance=ExtResource("1_db6p7")]
 layout_mode = 0
-offset_left = 386.0
-offset_top = 457.0
-offset_right = 426.0
-offset_bottom = 497.0
-next_nodes = [NodePath("../Show Reward Amount"), NodePath("../Balls Per Game")]
-upgrade = 4
-
-[node name="Show Reward Amount" parent="UpgradeNodes" instance=ExtResource("1_db6p7")]
-layout_mode = 0
-offset_left = 557.0
-offset_top = 457.0
-offset_right = 597.0
-offset_bottom = 497.0
+offset_left = 260.0
+offset_top = 550.0
+offset_right = 300.0
+offset_bottom = 590.0
+pivot_offset = Vector2(21, 20)
+next_nodes = [NodePath("../Free Snacks"), NodePath("../Balls Per Game")]
 upgrade = 3
+texture = ExtResource("8_jwdw3")
 
-[node name="Balls Per Game" parent="UpgradeNodes" instance=ExtResource("1_db6p7")]
+[node name="Free Snacks" parent="UpgradeNodes" node_paths=PackedStringArray("next_nodes") instance=ExtResource("1_db6p7")]
 layout_mode = 0
-offset_left = 392.0
-offset_top = 568.0
-offset_right = 432.0
-offset_bottom = 608.0
+offset_left = 260.0
+offset_top = 670.0
+offset_right = 300.0
+offset_bottom = 710.0
+pivot_offset = Vector2(21, 20)
+next_nodes = [NodePath("../DecorUpgrade")]
+upgrade = 17
+texture = ExtResource("9_qk3q1")
+
+[node name="DecorUpgrade" parent="UpgradeNodes" node_paths=PackedStringArray("next_nodes") instance=ExtResource("1_db6p7")]
+layout_mode = 0
+offset_left = 260.0
+offset_top = 790.0
+offset_right = 300.0
+offset_bottom = 830.0
+pivot_offset = Vector2(21, 20)
+next_nodes = [NodePath("../VipLounge")]
+upgrade = 18
+texture = ExtResource("10_iypik")
+
+[node name="VipLounge" parent="UpgradeNodes" node_paths=PackedStringArray("next_nodes") instance=ExtResource("1_db6p7")]
+layout_mode = 0
+offset_left = 260.0
+offset_top = 910.0
+offset_right = 300.0
+offset_bottom = 950.0
+pivot_offset = Vector2(21, 20)
+next_nodes = [NodePath("../ShinyBalls")]
+upgrade = 20
+texture = ExtResource("11_s5gr3")
+
+[node name="ShinyBalls" parent="UpgradeNodes" node_paths=PackedStringArray("next_nodes") instance=ExtResource("1_db6p7")]
+layout_mode = 0
+offset_left = 140.0
+offset_top = 910.0
+offset_right = 180.0
+offset_bottom = 950.0
+pivot_offset = Vector2(21, 20)
+next_nodes = [NodePath("../New Machines")]
+upgrade = 21
+texture = ExtResource("8_jwdw3")
+
+[node name="New Machines" parent="UpgradeNodes" instance=ExtResource("1_db6p7")]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 910.0
+offset_right = 60.0
+offset_bottom = 950.0
+pivot_offset = Vector2(21, 20)
+upgrade = 22
+texture = ExtResource("12_o53fm")
+
+[node name="Balls Per Game" parent="UpgradeNodes" node_paths=PackedStringArray("next_nodes") instance=ExtResource("1_db6p7")]
+layout_mode = 0
+offset_left = 380.0
+offset_top = 550.0
+offset_right = 420.0
+offset_bottom = 590.0
+next_nodes = [NodePath("../Pegs Can Have prizes Percetange"), NodePath("../Max Level Reward"), NodePath("../BronzeBalls")]
 upgrade = 2
+texture = ExtResource("9_ws61t")
+
+[node name="BronzeBalls" parent="UpgradeNodes" node_paths=PackedStringArray("next_nodes") instance=ExtResource("1_db6p7")]
+layout_mode = 0
+offset_left = 380.0
+offset_top = 430.0
+offset_right = 420.0
+offset_bottom = 470.0
+next_nodes = [NodePath("../SilverBalls")]
+upgrade = 11
+texture = ExtResource("10_t60i8")
+
+[node name="SilverBalls" parent="UpgradeNodes" node_paths=PackedStringArray("next_nodes") instance=ExtResource("1_db6p7")]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 430.0
+offset_right = 540.0
+offset_bottom = 470.0
+next_nodes = [NodePath("../GoldBalls")]
+upgrade = 12
+texture = ExtResource("11_aoq7x")
+
+[node name="GoldBalls" parent="UpgradeNodes" node_paths=PackedStringArray("next_nodes") instance=ExtResource("1_db6p7")]
+layout_mode = 0
+offset_left = 620.0
+offset_top = 430.0
+offset_right = 660.0
+offset_bottom = 470.0
+next_nodes = [NodePath("../DiamondBalls")]
+upgrade = 13
+texture = ExtResource("12_1lmaf")
+
+[node name="DiamondBalls" parent="UpgradeNodes" node_paths=PackedStringArray("next_nodes") instance=ExtResource("1_db6p7")]
+layout_mode = 0
+offset_left = 740.0
+offset_top = 430.0
+offset_right = 780.0
+offset_bottom = 470.0
+next_nodes = [NodePath("../PlatBalls")]
+upgrade = 14
+texture = ExtResource("13_qk3q1")
+
+[node name="PlatBalls" parent="UpgradeNodes" instance=ExtResource("1_db6p7")]
+layout_mode = 0
+offset_left = 860.0
+offset_top = 430.0
+offset_right = 900.0
+offset_bottom = 470.0
+upgrade = 15
+texture = ExtResource("14_iypik")
+
+[node name="Max Level Reward" parent="UpgradeNodes" node_paths=PackedStringArray("next_nodes") instance=ExtResource("1_db6p7")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.443
+anchor_top = 0.605
+anchor_right = 0.45
+anchor_bottom = 0.605
+offset_left = -284.5
+offset_top = 196.0
+offset_right = -255.0
+offset_bottom = 236.0
+pivot_offset = Vector2(-191, -342)
+next_nodes = [NodePath("../Balls Respawn on miss"), NodePath("../Prizes Can Be claimed multiple times")]
+texture = ExtResource("14_dbmu8")
+
+[node name="Pegs Can Have prizes Percetange" parent="UpgradeNodes" node_paths=PackedStringArray("next_nodes") instance=ExtResource("1_db6p7")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.38
+anchor_top = 0.735
+anchor_right = 0.38
+anchor_bottom = 0.735
+offset_left = -70.0
+offset_top = -38.0
+offset_right = -30.0
+offset_bottom = 2.0
+pivot_offset = Vector2(585, -317)
+next_nodes = [NodePath("../Pegs prize amount")]
+upgrade = 5
+texture = ExtResource("10_ynu60")
+
+[node name="Pegs prize amount" parent="UpgradeNodes" node_paths=PackedStringArray("next_nodes") instance=ExtResource("1_db6p7")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.449
+anchor_top = 0.735
+anchor_right = 0.449
+anchor_bottom = 0.735
+offset_left = -53.5
+offset_top = -38.0
+offset_right = -13.5
+offset_bottom = 2.0
+pivot_offset = Vector2(-269, -374)
+next_nodes = [NodePath("../Prizes claimed X per peg")]
+upgrade = 5
+texture = ExtResource("11_mgk3p")
+
+[node name="Prizes claimed X per peg" parent="UpgradeNodes" node_paths=PackedStringArray("next_nodes") instance=ExtResource("1_db6p7")]
+layout_mode = 0
+offset_left = 740.0
+offset_top = 550.0
+offset_right = 780.0
+offset_bottom = 590.0
+next_nodes = [NodePath("../Chance To Split Ball on Peg")]
+upgrade = 7
+texture = ExtResource("10_hxoeu")
+
+[node name="Chance To Split Ball on Peg" parent="UpgradeNodes" instance=ExtResource("1_db6p7")]
+layout_mode = 0
+offset_left = 860.0
+offset_top = 550.0
+offset_right = 900.0
+offset_bottom = 590.0
+upgrade = 10
+texture = ExtResource("15_bk4jg")
+
+[node name="Balls Respawn on miss" parent="UpgradeNodes" node_paths=PackedStringArray("next_nodes") instance=ExtResource("1_db6p7")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.558
+anchor_top = 0.605
+anchor_right = 0.558
+anchor_bottom = 0.605
+offset_left = -337.0
+offset_top = 196.0
+offset_right = -297.0
+offset_bottom = 236.0
+next_nodes = [NodePath("../Min Rewards Per Level")]
+upgrade = 8
+texture = ExtResource("20_1lmaf")
+
+[node name="Min Rewards Per Level" parent="UpgradeNodes" node_paths=PackedStringArray("next_nodes") instance=ExtResource("1_db6p7")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.558
+anchor_top = 0.605
+anchor_right = 0.558
+anchor_bottom = 0.605
+offset_left = -217.0
+offset_top = 196.0
+offset_right = -177.0
+offset_bottom = 236.0
+next_nodes = [NodePath("../Chance to spawn ball on prize claimed")]
+upgrade = 1
+texture = ExtResource("17_hrb1w")
+
+[node name="Chance to spawn ball on prize claimed" parent="UpgradeNodes" instance=ExtResource("1_db6p7")]
+layout_mode = 0
+offset_left = 740.0
+offset_top = 680.0
+offset_right = 780.0
+offset_bottom = 720.0
+upgrade = 9
+texture = ExtResource("11_y7x7c")
 
 [node name="Prizes Can Be claimed multiple times" parent="UpgradeNodes" instance=ExtResource("1_db6p7")]
 layout_mode = 0
-offset_left = 953.0
-offset_top = 456.0
-offset_right = 993.0
-offset_bottom = 496.0
-upgrade = 7
-
-[node name="Prizes claimed X per peg" parent="UpgradeNodes" instance=ExtResource("1_db6p7")]
-layout_mode = 0
-offset_left = 1064.0
-offset_top = 457.0
-offset_right = 1104.0
-offset_bottom = 497.0
-upgrade = 8
-
-[node name="Pegs Can Have prizes Percetange" parent="UpgradeNodes" instance=ExtResource("1_db6p7")]
-layout_mode = 0
-offset_left = 550.0
-offset_top = 568.0
-offset_right = 590.0
-offset_bottom = 608.0
-upgrade = 5
-
-[node name="Pegs prize amount" parent="UpgradeNodes" instance=ExtResource("1_db6p7")]
-layout_mode = 0
-offset_left = 654.0
-offset_top = 568.0
-offset_right = 694.0
-offset_bottom = 608.0
+offset_left = 380.0
+offset_top = 800.0
+offset_right = 420.0
+offset_bottom = 840.0
+pivot_offset = Vector2(-6, -268)
 upgrade = 6
-
-[node name="Max Level Reward" parent="UpgradeNodes" instance=ExtResource("1_db6p7")]
-layout_mode = 0
-offset_left = 655.0
-offset_top = 464.0
-offset_right = 695.0
-offset_bottom = 504.0
-
-[node name="Min Rewards Per Level" parent="UpgradeNodes" instance=ExtResource("1_db6p7")]
-layout_mode = 0
-offset_left = 817.0
-offset_top = 464.0
-offset_right = 857.0
-offset_bottom = 504.0
-upgrade = 1
+texture = ExtResource("10_4jcny")

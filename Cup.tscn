@@ -1,6 +1,5 @@
-[gd_scene load_steps=7 format=3 uid="uid://p1vcve4ffcxb"]
+[gd_scene load_steps=6 format=3 uid="uid://p1vcve4ffcxb"]
 
-[ext_resource type="Texture2D" uid="uid://1vdo8rk7372o" path="res://cup.png" id="1_txe44"]
 [ext_resource type="Script" uid="uid://sts8l43ovr3b" path="res://scripts/cup.gd" id="2_mf33u"]
 [ext_resource type="FontFile" uid="uid://u7ldl4fncbjv" path="res://fonts/m6x11.ttf" id="3_5218k"]
 
@@ -19,15 +18,14 @@ shadow_size = 30
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(0, 10)
 
-[node name="Cup" type="Sprite2D"]
-texture = ExtResource("1_txe44")
+[node name="Cup" type="Node2D"]
 script = ExtResource("2_mf33u")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 physics_material_override = SubResource("PhysicsMaterial_txe44")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
-polygon = PackedVector2Array(-57, -27, -82, -41, -70, 31, 71, 32, 82, -42, 49, -27, 59, 20, -59, 21)
+polygon = PackedVector2Array(-60, -18, -83, -66, -85, 33, 83, 32, 82, -67, 60, -24, 59, 20, -59, 21)
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_mask = 2
@@ -42,10 +40,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -142.5
-offset_top = -93.5
-offset_right = -2.5
-offset_bottom = 3.5
+offset_left = -68.0
+offset_top = -75.0
+offset_right = 72.0
+offset_bottom = 22.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "$0"

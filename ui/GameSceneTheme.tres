@@ -1,13 +1,15 @@
-[gd_resource type="Theme" load_steps=5 format=3 uid="uid://du2jkyh4el8aw"]
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://du2jkyh4el8aw"]
 
 [ext_resource type="FontFile" uid="uid://u7ldl4fncbjv" path="res://fonts/m6x11.ttf" id="1_1jqag"]
+[ext_resource type="StyleBox" uid="uid://c0y242nrsahb3" path="res://ui/DefaultBtnHover.tres" id="2_4djqw"]
+[ext_resource type="StyleBox" uid="uid://dfq64kx1ingte" path="res://ui/DefaultBtn.tres" id="3_0lrwi"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e5xc2"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0lrwi"]
 content_margin_left = 50.0
 content_margin_top = 50.0
 content_margin_right = 50.0
 content_margin_bottom = 50.0
-bg_color = Color(0.895452, 0.471006, 0, 1)
+bg_color = Color(0.327662, 0.156776, 3.36915e-07, 1)
 border_width_left = 10
 border_width_top = 10
 border_width_right = 10
@@ -15,11 +17,24 @@ border_width_bottom = 10
 border_color = Color(1, 1, 1, 1)
 corner_detail = 1
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_milix"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_corvw"]
 content_margin_left = 50.0
 content_margin_top = 50.0
 content_margin_right = 50.0
 content_margin_bottom = 50.0
+bg_color = Color(1, 0.704703, 0.494476, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(1, 1, 1, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4djqw"]
+content_margin_left = 20.0
+content_margin_top = 25.0
+content_margin_right = 20.0
+content_margin_bottom = 25.0
 bg_color = Color(0.895452, 0.471006, 0, 1)
 border_width_left = 10
 border_width_top = 10
@@ -44,10 +59,13 @@ border_color = Color(1, 1, 1, 1)
 Button/colors/font_color = Color(1, 1, 1, 1)
 Button/colors/font_outline_color = Color(0, 0, 0, 1)
 Button/constants/outline_size = 20
-Button/font_sizes/font_size = 80
+Button/font_sizes/font_size = 64
 Button/fonts/font = ExtResource("1_1jqag")
-Button/styles/hover = SubResource("StyleBoxFlat_e5xc2")
-Button/styles/normal = SubResource("StyleBoxFlat_milix")
+Button/styles/disabled = SubResource("StyleBoxFlat_0lrwi")
+Button/styles/focus = SubResource("StyleBoxFlat_corvw")
+Button/styles/hover = ExtResource("2_4djqw")
+Button/styles/normal = ExtResource("3_0lrwi")
+Button/styles/pressed = SubResource("StyleBoxFlat_4djqw")
 HBoxContainer/constants/separation = 30
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_1jqag")
 VBoxContainer/constants/separation = 30
