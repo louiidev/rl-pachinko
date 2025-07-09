@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://p1vcve4ffcxb"]
+[gd_scene load_steps=7 format=3 uid="uid://p1vcve4ffcxb"]
 
 [ext_resource type="Script" uid="uid://sts8l43ovr3b" path="res://scripts/cup.gd" id="2_mf33u"]
 [ext_resource type="FontFile" uid="uid://u7ldl4fncbjv" path="res://fonts/m6x11.ttf" id="3_5218k"]
+[ext_resource type="Texture2D" uid="uid://cgngbhqswoxqc" path="res://icons/ticket.png" id="3_t7sk4"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_txe44"]
 bounce = 0.3
@@ -49,3 +50,8 @@ grow_vertical = 2
 text = "$0"
 label_settings = SubResource("LabelSettings_t7sk4")
 horizontal_alignment = 1
+
+[node name="Token" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, -52)
+texture = ExtResource("3_t7sk4")

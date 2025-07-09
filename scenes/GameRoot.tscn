@@ -1,9 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://cq50rgvn4uxnv"]
+[gd_scene load_steps=9 format=3 uid="uid://cq50rgvn4uxnv"]
 
 [ext_resource type="Script" uid="uid://dancjusrisc78" path="res://scripts/game_root_controller.gd" id="1_8ao7o"]
 [ext_resource type="PackedScene" uid="uid://cx7stidp768o" path="res://prefabs/Transition.tscn" id="2_lkoyb"]
+[ext_resource type="Script" uid="uid://bgijdpd7y6546" path="res://scripts/global_audio_player.gd" id="3_kbynm"]
+[ext_resource type="Script" uid="uid://i0ncmvapuued" path="res://scripts/audio/audio_library.gd" id="4_tnfu1"]
+[ext_resource type="Theme" uid="uid://du2jkyh4el8aw" path="res://ui/GameSceneTheme.tres" id="5_v7i1n"]
+[ext_resource type="LabelSettings" uid="uid://cpd6oxhesfn23" path="res://ui/LabelSettings/GameUISmallLabel.tres" id="6_653ys"]
+[ext_resource type="LabelSettings" uid="uid://dcrxj6ropvsma" path="res://ui/LabelSettings/GameUILabelSettings.tres" id="6_it2jm"]
+[ext_resource type="Script" uid="uid://6n1v3pk00vuj" path="res://scripts/volumn_slider.gd" id="7_p13ka"]
 
 [node name="GameRoot" type="Node2D"]
+process_mode = 3
 script = ExtResource("1_8ao7o")
 
 [node name="CurrentScene" type="Node2D" parent="."]
@@ -11,3 +18,81 @@ script = ExtResource("1_8ao7o")
 [node name="Transition" parent="." instance=ExtResource("2_lkoyb")]
 z_index = 100
 offset_bottom = 480.0
+
+[node name="GlobalAudioPlayer" type="Node2D" parent="."]
+script = ExtResource("3_kbynm")
+
+[node name="SfxPlayer" type="AudioStreamPlayer2D" parent="GlobalAudioPlayer"]
+bus = &"Sfx"
+script = ExtResource("4_tnfu1")
+
+[node name="Settings" type="CenterContainer" parent="."]
+process_mode = 2
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_right = 1920.0
+offset_bottom = 1080.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("5_v7i1n")
+
+[node name="PanelContainer" type="PanelContainer" parent="Settings"]
+custom_minimum_size = Vector2(550, 600)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Settings/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Settings/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "SETTINGS"
+label_settings = ExtResource("6_it2jm")
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="Settings/PanelContainer/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Master" type="Label" parent="Settings/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Master"
+label_settings = ExtResource("6_653ys")
+
+[node name="HSlider" type="HSlider" parent="Settings/PanelContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+value = 1.0
+script = ExtResource("7_p13ka")
+bus_name = "Master"
+
+[node name="Master2" type="Label" parent="Settings/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Music"
+label_settings = ExtResource("6_653ys")
+
+[node name="HSlider2" type="HSlider" parent="Settings/PanelContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+value = 1.0
+script = ExtResource("7_p13ka")
+bus_name = "Master"
+
+[node name="Master3" type="Label" parent="Settings/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Sound Effects"
+label_settings = ExtResource("6_653ys")
+
+[node name="HSlider3" type="HSlider" parent="Settings/PanelContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+value = 1.0
+script = ExtResource("7_p13ka")
+bus_name = "Master"

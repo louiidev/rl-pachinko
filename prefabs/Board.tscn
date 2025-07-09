@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://c4ixlg1xsbgh6" path="res://scripts/layout.gd" id="3_vh7qr"]
 [ext_resource type="PackedScene" uid="uid://bnd1l3v1he3d7" path="res://Peg.tscn" id="4_u6leh"]
 [ext_resource type="PackedScene" uid="uid://p1vcve4ffcxb" path="res://Cup.tscn" id="5_odh72"]
-[ext_resource type="PackedScene" uid="uid://dmwil22dm8e3l" path="res://Cannon.tscn" id="6_2u1bp"]
+[ext_resource type="PackedScene" uid="uid://dmwil22dm8e3l" path="res://prefabs/Cannon.tscn" id="6_2u1bp"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_pbw6q"]
 distance = 13.0
@@ -69,5 +69,7 @@ position = Vector2(1628.5, 998)
 visible = false
 position = Vector2(1770.5, 998)
 
-[node name="Cannon" parent="." instance=ExtResource("6_2u1bp")]
-position = Vector2(1070, 47)
+[node name="CannonContainer" type="Node2D" parent="."]
+position = Vector2(1020, 47)
+
+[node name="Cannon" parent="CannonContainer" instance=ExtResource("6_2u1bp")]

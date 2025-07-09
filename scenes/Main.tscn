@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://4r8qvx2odoep"]
+[gd_scene load_steps=12 format=3 uid="uid://4r8qvx2odoep"]
 
 [ext_resource type="Script" uid="uid://ba4823pre2yl7" path="res://scripts/main.gd" id="1_rgh2o"]
 [ext_resource type="LabelSettings" uid="uid://dcrxj6ropvsma" path="res://ui/LabelSettings/GameUILabelSettings.tres" id="2_50glp"]
@@ -6,8 +6,9 @@
 [ext_resource type="LabelSettings" uid="uid://cpd6oxhesfn23" path="res://ui/LabelSettings/GameUISmallLabel.tres" id="3_lhr70"]
 [ext_resource type="Script" uid="uid://cik52rhd1w27g" path="res://scripts/button_shaker.gd" id="4_jlsqs"]
 [ext_resource type="Script" uid="uid://bttbimes54k4a" path="res://scripts/ui_shaker.gd" id="5_nxtc6"]
-[ext_resource type="Script" uid="uid://b01d20ljxxsjo" path="res://scenes/fps_label.gd" id="5_wp0k4"]
+[ext_resource type="Script" uid="uid://b01d20ljxxsjo" path="res://scripts/fps_label.gd" id="5_wp0k4"]
 [ext_resource type="PackedScene" uid="uid://ddceknw0yy6ty" path="res://prefabs/Board.tscn" id="6_c01mt"]
+[ext_resource type="Script" uid="uid://i0ncmvapuued" path="res://scripts/audio/audio_library.gd" id="9_q8u5g"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jlsqs"]
 content_margin_left = 50.0
@@ -36,6 +37,7 @@ border_color = Color(1, 1, 1, 1)
 corner_detail = 1
 
 [node name="Main" type="Node2D"]
+process_mode = 1
 script = ExtResource("1_rgh2o")
 
 [node name="UI" type="Control" parent="."]
@@ -166,3 +168,6 @@ script = ExtResource("5_wp0k4")
 position = Vector2(-347, 30)
 
 [node name="BallsContainer" type="Node2D" parent="."]
+
+[node name="SfxPlayer" type="AudioStreamPlayer2D" parent="."]
+script = ExtResource("9_q8u5g")

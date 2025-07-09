@@ -1,15 +1,13 @@
 @tool
-class_name UpgradeNode extends Control
-
-@export var next_nodes: Array[UpgradeNode]
+class_name UpgradeNode extends Node2D
 
 @export var upgrade: Game.Upgrades
-
 
 @onready var border: TextureRect = $Sprite/Border
 @onready var color_rect: ColorRect = $Sprite/Border/ColorRect
 @onready var button: TextureButton = $Button
 @onready var popup: CenterContainer = $Popup
+@onready var popup_panel: PanelContainer = $Popup/PanelContainer
 
 @onready var popup_name_label: Label = $Popup/PanelContainer/PopupInfo/Name
 @onready var popup_description: Label = $Popup/PanelContainer/PopupInfo/MoneyPerSec
@@ -20,12 +18,13 @@ class_name UpgradeNode extends Control
 @onready var shaker2: Motion = $Shaker2
 @onready var shaker3: Motion = $Shaker3
 @onready var shaker4: Motion = $Shaker4
-@onready var scene_parent: Node2D
 
-@onready var sprite = $Sprite
+@onready var sprite: TextureRect = $Sprite
+@onready var tick: Sprite2D = $Tick
 
 @onready var timer: Timer = $ClosePopupTimer
 @onready var debounce_timer: Timer = $DebounceTimer
+@onready var sfx_player: AudioLibrary = $SfxPlayer
 
 @export var texture: Texture2D
 
@@ -37,8 +36,6 @@ func hover():
 	popup.show()
 	timer.stop()
 	
-	
-	
 
 func set_popup_data_ui():
 	var current_level = Game.get_upgrade_current_level(upgrade)
@@ -49,22 +46,45 @@ func set_popup_data_ui():
 	if current_level == max_level:
 		popup_cost.hide()
 	else:
-		popup_cost.text = "$" + str(Game.get_upgrade_current_cost(upgrade))
+		popup_cost.text = "$" + str(Game.get_upgrade_next_cost(upgrade))
 
 func close_popup_timer():
 	popup.hide()
 	
 	
-func set_up_lines():
-	for node: UpgradeNode in next_nodes:
-		var line = Line2D.new()
+func show_next_nodes(build_lines_always: bool = false):
+	for child in get_children():
+		if !is_upgrade_node_instance(child):
+			continue
+		var node: UpgradeNode = child
+		if Game.is_upgrade_money_per_second(node.upgrade) && Game.get_upgrade_current_level(upgrade) == Game.get_upgrade_max_level(upgrade) || !Game.is_upgrade_money_per_second(node.upgrade):
+			if !child.visible || build_lines_always:
+				child.show()
+				var line = Line2D.new()
+				line.z_index = -2
+				line.width = 2.0
+				line.add_point(Vector2.ZERO)
+				line.add_point(child.position)
+				self.add_child.call_deferred(line)
 		
-		line.z_index = -2
-		line.width = 2.0
-		line.add_point(scene_parent.to_local(border.global_position + border.size * 0.5))
-		line.add_point(scene_parent.to_local(node.border.global_position + border.size * 0.5))
-		scene_parent.add_child.call_deferred(line)
 
+
+func is_upgrade_node_instance(node: Node) -> bool:
+	return node.get_script() != null && node.get_script().get_global_name() == "UpgradeNode"
+
+
+		
+func hide_children_recursively():
+	for child in get_children():
+		if !is_upgrade_node_instance(child):
+			continue
+		var node: UpgradeNode = child
+		
+		node.hide_children_recursively()
+		node.hide()
+		
+
+var panel_y_pos: float
 func _ready() -> void:
 	if texture != null:
 		sprite.texture = texture
@@ -74,14 +94,28 @@ func _ready() -> void:
 	popup.hide()
 	button.mouse_entered.connect(hover)
 	set_popup_data_ui()
-	scene_parent = get_parent().get_parent()
 	timer.timeout.connect(close_popup_timer)
 	
-	
 	color_rect.color = RenderingServer.get_default_clear_color()
-	set_up_lines.call_deferred()
-
 	
+
+	if Game.get_upgrade_current_level(upgrade) == Game.get_upgrade_max_level(upgrade):
+		tick.show()
+	
+	
+	panel_y_pos = popup.global_position.y
+	if panel_y_pos < 10:
+		popup.position.y = 80
+	if Game.get_upgrade_current_level(upgrade) > 0:
+		show_next_nodes.call_deferred(true)
+	else:
+		hide_children_recursively()
+		
+
+func should_show_children_nodes() -> bool:
+	if upgrade == Game.Upgrades.Customers && Game.get_upgrade_current_level(upgrade) == 1:
+		return true
+	return Game.is_upgrade_money_per_second(upgrade) && Game.get_upgrade_current_level(upgrade) == Game.get_upgrade_max_level(upgrade)  || !Game.is_upgrade_money_per_second(upgrade) && Game.get_upgrade_current_level(upgrade) > 0
 	
 
 func on_upgrade():
@@ -91,6 +125,13 @@ func on_upgrade():
 	Game.on_upgrade_level_up(upgrade)
 	set_popup_data_ui()
 
+	sfx_player.play_sfx(AudioLibrary.SoundFxs.Click)
+	
+	show_next_nodes.call_deferred()
+
+	if Game.get_upgrade_current_level(upgrade) == Game.get_upgrade_max_level(upgrade):
+		tick.show()
+
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
@@ -99,15 +140,16 @@ func _process(_delta: float) -> void:
 		
 		
 	if !button.is_hovered() && popup.visible && timer.is_stopped():
-		var rect = Rect2(global_position - abs(pivot_offset), size + abs(pivot_offset))
+		var rect = Rect2(border.global_position, border.size)
 		if !rect.has_point(get_global_mouse_position()):
 			timer.start(0.15)
-			print("TIMER START")
 			
 		
-	button.disabled = Game.get_upgrade_current_cost(upgrade) > Game.money || Game.get_upgrade_current_level(upgrade) >= Game.get_upgrade_max_level(upgrade)
+	button.disabled = Game.get_upgrade_next_cost(upgrade) > Game.money || Game.get_upgrade_current_level(upgrade) >= Game.get_upgrade_max_level(upgrade)
 	
 	if button.disabled:
-		border.modulate = Color.GREEN if Game.get_upgrade_current_level(upgrade) >= Game.get_upgrade_max_level(upgrade) else Color.RED 
+		border.modulate = Color.GREEN if Game.get_upgrade_current_level(upgrade) >= Game.get_upgrade_max_level(upgrade) else Color.DARK_RED 
 	else:
 		border.modulate = Color.WHITE
+		if Game.get_upgrade_current_level(upgrade) == 0:
+			border.modulate.a = 0.3

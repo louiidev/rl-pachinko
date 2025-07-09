@@ -2,10 +2,15 @@ extends Node
 
 
 signal change_scene_request(scene: GameRoot.Scene)
+signal sound_fx_request(sound: AudioLibrary.SoundFxs, volumn_db: float)
 
 var rng: = RandomNumberGenerator.new()
-var money = 300000
+var money = 1000
+var highscore = 0
 var money_this_game = 0
+var base_level_reward = 30
+var tokens = 0
+
 enum Upgrades {
 	MaxRewardAmountPercentage,
 	MinRewardColumns, 
@@ -30,6 +35,28 @@ enum Upgrades {
 	VipLounge,
 	ShinyBalls,
 	NewMachines,
+	BronzeBallsGetPegBonus,
+	SilverBallsGetPegBonus,
+	GoldBallsGetPegBonus,
+	DiamondBallsGetPegBonus,
+	PlatBallsGetPegBonus,
+	MaxTokens,
+	LessNegativePrizes,
+	LessNegativePegs,
+	
+	# Prestige Upgrades
+	DoubleMoneyEarned,
+	TripleMoneyEarned,
+	QuadurpleMoneyEarned,
+	MagicBallsOnPegHit,
+	PegsHaveChanceToSpawnMiniBalls,
+	AutoDropper,
+	AutoDropperRate,
+	CannonMovesHorizontally,
+	ExtraCannon,
+	KeepMoneyOnPresstige,
+	KeepUpgradesOnPrestige,
+	BaseLevelRewardsUpX
 }
 
 
@@ -42,184 +69,419 @@ const MAX_LEVEL: String = "max_level"
 const INITIAL_PRICE: String = "initial_price"
 const VALUE_PER_LEVEL: String = "value_per_level"
 const UPGRADE_TYPE: String = "upgrade_type"
+const UPGRADE_PRESTIGE_TYPE: String = "upgrade_prestige_type"
 enum UpgradeType { Gameplay, MoneyPerSecond }
+enum UpgradePrestigeType { Normal, Prestige }
 
+
+func add_money(amount: int):
+	var new_amount = amount
+	if amount > 0:
+		if has_upgrade(Upgrades.QuadurpleMoneyEarned):
+			new_amount = amount * 4
+		elif has_upgrade(Upgrades.TripleMoneyEarned):
+			new_amount = amount * 3
+		elif has_upgrade(Upgrades.DoubleMoneyEarned):
+			new_amount = amount * 2
+	
+	Game.money+=new_amount
+	Game.money_this_game+=new_amount
+			
+
+	Game.money = max(0, Game.money)
+	Game.money_this_game = max(0, Game.money_this_game)
+
+
+func reset_all_upgrades():
+	for upgrade in Upgrades.values():
+		var data: Dictionary = upgrade_data.get(upgrade)
+		if data.get_or_add(UPGRADE_PRESTIGE_TYPE, UpgradePrestigeType.Normal) == UpgradePrestigeType.Normal:
+			upgrade_data.set(upgrade, upgrades_data_clone.get(upgrade))
+	
 var upgrade_data: Dictionary[Upgrades, Dictionary] = {
+	# Prestige Upgrades (Token-based pricing)
+	Upgrades.DoubleMoneyEarned: {
+		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
+		NAME: "Double Money Earned",
+		DESCRIPTION: "2x all money earned from prizes",
+		INITIAL_VALUE: 1.0,
+		VALUE_PER_LEVEL: 1.0,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 1,
+		INITIAL_PRICE: 1, # 1 token
+		CURRENT_PRICE: 1,
+	},
+	Upgrades.TripleMoneyEarned: {
+		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
+		NAME: "Triple Money Earned",
+		DESCRIPTION: "3x all money earned from prizes",
+		INITIAL_VALUE: 2.0,
+		VALUE_PER_LEVEL: 1.0,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 1,
+		INITIAL_PRICE: 3, # 3 tokens
+		CURRENT_PRICE: 3,
+	},
+	Upgrades.QuadurpleMoneyEarned: {
+		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
+		NAME: "Quadruple Money Earned",
+		DESCRIPTION: "4x all money earned from prizes",
+		INITIAL_VALUE: 3.0,
+		VALUE_PER_LEVEL: 1.0,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 1,
+		INITIAL_PRICE: 6, # 6 tokens
+		CURRENT_PRICE: 6,
+	},
+	Upgrades.MagicBallsOnPegHit: {
+		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
+		NAME: "Magic Balls on Peg Hit",
+		DESCRIPTION: "+1% Chance ball turns into magic ball when hitting pegs",
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 0.01,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 5,
+		INITIAL_PRICE: 2, # 2 tokens
+		CURRENT_PRICE: 2,
+	},
+	Upgrades.PegsHaveChanceToSpawnMiniBalls: {
+		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
+		NAME: "Pegs Spawn Mini Balls",
+		DESCRIPTION: "+2% Chance pegs spawn mini balls",
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 0.02,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 10,
+		INITIAL_PRICE: 2, # 2 tokens
+		CURRENT_PRICE: 2,
+	},
+	Upgrades.AutoDropper: {
+		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
+		NAME: "Auto Dropper",
+		DESCRIPTION: "Automatically drops balls every 5 seconds",
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 1.0,
+		CURRENT_LEVEL:0,
+		MAX_LEVEL: 1,
+		INITIAL_PRICE: 4, # 4 tokens
+		CURRENT_PRICE: 4,
+	},
+	Upgrades.AutoDropperRate: {
+		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
+		NAME: "Auto Dropper Rate",
+		DESCRIPTION: "-0.5 seconds from auto dropper rate",
+		INITIAL_VALUE: 2.5,
+		VALUE_PER_LEVEL: -0.5,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 4,
+		INITIAL_PRICE: 1, # 1 token
+		CURRENT_PRICE: 1,
+	},
+	Upgrades.CannonMovesHorizontally: {
+		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
+		NAME: "Cannon Moves Horizontally",
+		DESCRIPTION: "Cannon can move left and right",
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 1.0,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 1,
+		INITIAL_PRICE: 5, # 5 tokens
+		CURRENT_PRICE: 5,
+	},
+	Upgrades.ExtraCannon: {
+		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
+		NAME: "Extra Cannon",
+		DESCRIPTION: "+1 additional cannon",
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 1,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 2,
+		INITIAL_PRICE: 8, # 8 tokens
+		CURRENT_PRICE: 8,
+	},
+	Upgrades.KeepMoneyOnPresstige: {
+		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
+		NAME: "Keep Money on Prestige",
+		DESCRIPTION: "Keep +10% of money when prestiging",
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 0.1,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 10,
+		INITIAL_PRICE: 10, # 10 tokens
+		CURRENT_PRICE: 10,
+	},
+	Upgrades.KeepUpgradesOnPrestige: {
+		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
+		NAME: "Keep Upgrades on Prestige",
+		DESCRIPTION: "Keep upgrades when prestiging",
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 0.2,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 1,
+		INITIAL_PRICE: 12, # 12 tokens
+		CURRENT_PRICE: 12,
+	},
+	Upgrades.BaseLevelRewardsUpX: {
+		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
+		NAME: "Base Level Rewards Up",
+		DESCRIPTION: "+x2 base reward values",
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 2,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 10,
+		INITIAL_PRICE: 3, # 3 tokens
+		CURRENT_PRICE: 3,
+	},
+	
+	# Regular Upgrades (Much higher prices)
+	Upgrades.LessNegativePegs: {
+		NAME: "Less Negative Pegs",
+		DESCRIPTION: "-1% Chance for Negative pegs to spawn",
+		INITIAL_VALUE: 0.05,
+		VALUE_PER_LEVEL: -0.01,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 5,
+		INITIAL_PRICE: 200, # Increased from 20
+	},
+	Upgrades.LessNegativePrizes: {
+		NAME: "Less Negative Prizes",
+		DESCRIPTION: "-2% Chance for Negative prizes to spawn",
+		INITIAL_VALUE: 0.10,
+		VALUE_PER_LEVEL: -0.025,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 5,
+		INITIAL_PRICE: 500, # Increased from 30
+	},
 	Upgrades.NewMachines: {
 		NAME: "New Machines",
-		DESCRIPTION: "+[$320 / secs]",
-		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 320,
-		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 10,
-		INITIAL_PRICE: 960,
-		CURRENT_PRICE: 960,
-		UPGRADE_TYPE: UpgradeType.MoneyPerSecond,
-	},
-	Upgrades.ShinyBalls: {
-		NAME: "Shiny Balls",
-		DESCRIPTION: "+[$160 / secs]",
-		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 160,
-		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 10,
-		INITIAL_PRICE: 480,
-		CURRENT_PRICE: 480,
-		UPGRADE_TYPE: UpgradeType.MoneyPerSecond,
-	},
-	Upgrades.VipLounge: {
-		NAME: "VIP Lounge",
-		DESCRIPTION: "+[$80 / secs]",
+		DESCRIPTION: "+[$80 / secs]", # Halved from 160
 		INITIAL_VALUE: 0,
 		VALUE_PER_LEVEL: 80,
 		CURRENT_LEVEL: 0,
 		MAX_LEVEL: 10,
-		INITIAL_PRICE: 240,
-		CURRENT_PRICE: 240,
+		INITIAL_PRICE: 5000, # Increased from 960
+		CURRENT_PRICE: 5000,
 		UPGRADE_TYPE: UpgradeType.MoneyPerSecond,
 	},
-	Upgrades.ComfySeats: {
-		NAME: "More Comfortable Seats",
-		DESCRIPTION: "+[$40 / secs]",
+	Upgrades.ShinyBalls: {
+		NAME: "Shiny Balls",
+		DESCRIPTION: "+[$40 / secs]", # Halved from 80
 		INITIAL_VALUE: 0,
 		VALUE_PER_LEVEL: 40,
 		CURRENT_LEVEL: 0,
 		MAX_LEVEL: 10,
-		INITIAL_PRICE: 120,
-		CURRENT_PRICE: 120,
+		INITIAL_PRICE: 2500, # Increased from 480
+		CURRENT_PRICE: 2500,
 		UPGRADE_TYPE: UpgradeType.MoneyPerSecond,
 	},
-	Upgrades.DecorUpgrade: {
-		NAME: "Decor Upgrade",
-		DESCRIPTION: "+[$20 / secs]",
+	Upgrades.VipLounge: {
+		NAME: "VIP Lounge",
+		DESCRIPTION: "+[$20 / secs]", # Halved from 40
 		INITIAL_VALUE: 0,
 		VALUE_PER_LEVEL: 20,
 		CURRENT_LEVEL: 0,
 		MAX_LEVEL: 10,
-		INITIAL_PRICE: 60,
-		CURRENT_PRICE: 60,
+		INITIAL_PRICE: 1200, # Increased from 240
+		CURRENT_PRICE: 1200,
 		UPGRADE_TYPE: UpgradeType.MoneyPerSecond,
 	},
-	Upgrades.FreeSnacks: {
-		NAME: "Free Snacks",
-		DESCRIPTION: "+[$10 / secs]",
+	Upgrades.ComfySeats: {
+		NAME: "More Comfortable Seats",
+		DESCRIPTION: "+[$10 / secs]", # Halved from 20
 		INITIAL_VALUE: 0,
 		VALUE_PER_LEVEL: 10,
 		CURRENT_LEVEL: 0,
 		MAX_LEVEL: 10,
-		INITIAL_PRICE: 30,
-		CURRENT_PRICE: 30,
+		INITIAL_PRICE: 600, # Increased from 120
+		CURRENT_PRICE: 600,
+		UPGRADE_TYPE: UpgradeType.MoneyPerSecond,
+	},
+	Upgrades.DecorUpgrade: {
+		NAME: "Decor Upgrade",
+		DESCRIPTION: "+[$5 / secs]", # Halved from 10
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 5,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 10,
+		INITIAL_PRICE: 300, # Increased from 60
+		CURRENT_PRICE: 300,
+		UPGRADE_TYPE: UpgradeType.MoneyPerSecond,
+	},
+	Upgrades.FreeSnacks: {
+		NAME: "Free Snacks",
+		DESCRIPTION: "+[$2.5 / secs]", # Halved from 5
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 2.5,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 10,
+		INITIAL_PRICE: 150, # Increased from 30
+		CURRENT_PRICE: 150,
 		UPGRADE_TYPE: UpgradeType.MoneyPerSecond,
 	},
 	Upgrades.ChanceBallRespawnsOnMissedPrize: {
 		NAME: "Balls respawn on miss",
-		DESCRIPTION: "+10% Chance that Ball will respawn on missed Prize",
-		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 0.1,
-		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 5,
-		INITIAL_PRICE: 10,
-		CURRENT_PRICE: 10,
-	},
-	Upgrades.BronzeBallsSpawnPercentage: {	
-		NAME: "Bronze Balls have chance to spawn",
-		DESCRIPTION: "+2.5% Chance that Bronze Balls will spawn, bronze balls give +5x prize",
-		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 0.025,
-		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 15,
-		INITIAL_PRICE: 100,
-		CURRENT_PRICE: 100,
-	},
-	Upgrades.SilverBallsSpawnPercentage: {
-		NAME: "Silver Balls have chance to spawn",
-		DESCRIPTION: "+2.5% Chance that Silver Balls will spawn, bronze balls give +10x prize",
-		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 0.025,
-		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 15,
-		INITIAL_PRICE: 1000,
-		CURRENT_PRICE: 1000,
-	},
-	Upgrades.GoldBallsSpawnPercentage: {
-		NAME: "Gold Balls have chance to spawn",
-		DESCRIPTION: "+2.5% Chance that Gold Balls will spawn, bronze balls give +25x prize",
-		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 0.025,
-		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 15,
-		INITIAL_PRICE: 2000,
-		CURRENT_PRICE: 2000,
-	},
-	Upgrades.DiamonBallsSpawnPercentage: {
-		NAME: "Bronze Balls have chance to spawn",
-		DESCRIPTION: "+2.5% Chance that Bronze Balls will spawn, bronze balls give +50x prize",
-		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 0.025,
-		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 15,
-		INITIAL_PRICE: 3000,
-		CURRENT_PRICE: 3000,
-	},
-	Upgrades.PlatinumBallsSpawnPercentage: {
-		NAME: "Platinum Balls have chance to spawn",
-		DESCRIPTION: "+2.5% Chance that Platinum Balls will spawn, bronze balls give +100x prize",
-		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 0.025,
-		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 15,
-		INITIAL_PRICE: 4000,
-		CURRENT_PRICE: 4000,
-	},
-	Upgrades.TokensCanSpawnPercentage: {
-		NAME: "Prestige Tokens have chance to spawn",
-		DESCRIPTION: "+3% Chance that Prestige Tokens will spawn as prizes",
-		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 0.03,
-		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 15,
-		INITIAL_PRICE: 500,
-		CURRENT_PRICE: 500,
-	},
-	Upgrades.ChanceToSplitBallOnPegHit: {
-		NAME: "Chance to Split Ball on Peg Hit",
-		DESCRIPTION: "+1% Chance that ball will split on peg hit",
-		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 0.01,
-		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 15,
-		INITIAL_PRICE: 100,
-		CURRENT_PRICE: 100,
-	},
-	Upgrades.ChanceToSpawnBallOnPrizeClaim: {
-		NAME: "Chance to Respawn Ball",
-		DESCRIPTION: "+5% Chance that ball will respawn",
+		DESCRIPTION: "+5% Chance that Ball will respawn on missed Prize", # Halved from 10%
 		INITIAL_VALUE: 0,
 		VALUE_PER_LEVEL: 0.05,
 		CURRENT_LEVEL: 0,
 		MAX_LEVEL: 5,
-		INITIAL_PRICE: 100,
+		INITIAL_PRICE: 100, # Increased from 10
 		CURRENT_PRICE: 100,
+	},
+	Upgrades.BronzeBallsSpawnPercentage: {	
+		NAME: "Bronze Balls have chance to spawn",
+		DESCRIPTION: "+1.5% Chance that Bronze Balls will spawn, bronze balls give +5x prize", # Reduced from 2.5%
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 0.015,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 20, # Increased max level
+		INITIAL_PRICE: 800, # Increased from 100
+		CURRENT_PRICE: 800,
+	},
+	Upgrades.BronzeBallsGetPegBonus: {	
+		NAME: "Bronze Balls effect peg bonus",
+		DESCRIPTION: "Bronze balls give +5x prize",
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 1.0,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 1,
+		INITIAL_PRICE: 2000, # Increased from 500
+	},
+	Upgrades.SilverBallsSpawnPercentage: {
+		NAME: "Silver Balls have chance to spawn",
+		DESCRIPTION: "+1.5% Chance that Silver Balls will spawn, silver balls give +10x prize", # Reduced from 2.5%
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 0.015,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 20,
+		INITIAL_PRICE: 4000, # Increased from 1000
+		CURRENT_PRICE: 4000,
+	},
+	Upgrades.SilverBallsGetPegBonus: {	
+		NAME: "Silver Balls effect peg bonus",
+		DESCRIPTION: "Silver balls give +10x prize",
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 1.0, # Fixed from 0.025
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 1,
+		INITIAL_PRICE: 8000, # Increased from 1000
+	},
+	Upgrades.GoldBallsSpawnPercentage: {
+		NAME: "Gold Balls have chance to spawn",
+		DESCRIPTION: "+1.5% Chance that Gold Balls will spawn, gold balls give +25x prize", # Reduced from 2.5%
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 0.015,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 20,
+		INITIAL_PRICE: 15000, # Increased from 2000
+		CURRENT_PRICE: 15000,
+	},
+	Upgrades.GoldBallsGetPegBonus: {	
+		NAME: "Gold Balls effect peg bonus",
+		DESCRIPTION: "Gold balls give +25x prize",
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 1.0, # Fixed from 0.025
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 1,
+		INITIAL_PRICE: 30000, # Increased from 4000
+	},
+	Upgrades.DiamonBallsSpawnPercentage: {
+		NAME: "Diamond Balls have chance to spawn",
+		DESCRIPTION: "+1.5% Chance that Diamond Balls will spawn, diamond balls give +50x prize", # Fixed description
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 0.015,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 20,
+		INITIAL_PRICE: 50000, # Increased from 4000
+		CURRENT_PRICE: 50000,
+	},
+	Upgrades.DiamondBallsGetPegBonus: {	
+		NAME: "Diamond Balls effect peg bonus",
+		DESCRIPTION: "Diamond balls give +50x prize",
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 1.0, # Fixed from 0.025
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 1,
+		INITIAL_PRICE: 100000, # Increased from 8000
+	},
+	Upgrades.PlatinumBallsSpawnPercentage: {
+		NAME: "Platinum Balls have chance to spawn",
+		DESCRIPTION: "+1.5% Chance that Platinum Balls will spawn, platinum balls give +100x prize", # Reduced from 2.5%
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 0.015,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 20,
+		INITIAL_PRICE: 200000, # Increased from 8000
+		CURRENT_PRICE: 200000,
+	},
+	Upgrades.PlatBallsGetPegBonus: {	
+		NAME: "Platinum Balls effect peg bonus",
+		DESCRIPTION: "Platinum balls give +100x prize",
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 1.0, # Fixed from 0.025
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 1,
+		INITIAL_PRICE: 400000, # Increased from 16000
+	},
+	Upgrades.TokensCanSpawnPercentage: {
+		NAME: "Prestige Tokens have chance to spawn",
+		DESCRIPTION: "+2% Chance that Prestige Tokens will spawn as prizes", # Reduced from 5%
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 0.02,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 5, # Increased max level
+		INITIAL_PRICE: 75000, # Increased from 10000
+		CURRENT_PRICE: 75000,
+	},
+	Upgrades.MaxTokens: {
+		NAME: "Prestige Tokens max +1",
+		DESCRIPTION: "+1 Capacity to prestige tokens",
+		INITIAL_VALUE: 3,
+		VALUE_PER_LEVEL: 1,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 7, # Increased max level
+		INITIAL_PRICE: 500000, # Increased from 100000
+		CURRENT_PRICE: 500000,
+	},
+	Upgrades.ChanceToSplitBallOnPegHit: {
+		NAME: "Chance to Split Ball on Peg Hit",
+		DESCRIPTION: "+0.15% Chance that ball will split on peg hit", # Reduced from 0.25%
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 0.0015,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 15, # Increased max level
+		INITIAL_PRICE: 300, # Increased from 50
+		CURRENT_PRICE: 300,
+	},
+	Upgrades.ChanceToSpawnBallOnPrizeClaim: {
+		NAME: "Chance to Respawn Ball",
+		DESCRIPTION: "+3% Chance that ball will respawn", # Reduced from 5%
+		INITIAL_VALUE: 0,
+		VALUE_PER_LEVEL: 0.03,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 8, # Increased max level
+		INITIAL_PRICE: 250, # Increased from 30
+		CURRENT_PRICE: 250,
 	},
 	Upgrades.MaxRewardAmountPercentage: {
-		NAME: "Max Reward +Percetange",
-		DESCRIPTION: "+50% Max reward value for each level",
+		NAME: "Max Reward +Percentage",
+		DESCRIPTION: "+25% Max reward value for each level", # Reduced from 50%
 		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 0.5,
+		VALUE_PER_LEVEL: 0.25,
 		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 10,
-		INITIAL_PRICE: 100,
-		CURRENT_PRICE: 100,
+		MAX_LEVEL: 15, # Increased max level
+		INITIAL_PRICE: 400, # Increased from 60
+		CURRENT_PRICE: 400,
 	},
 	Upgrades.MaxBalls: {
-		NAME: "Max Balls ",
+		NAME: "Max Balls",
 		DESCRIPTION: "Max balls per game",
 		INITIAL_VALUE: 3,
 		VALUE_PER_LEVEL: 1,
 		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 100,
-		INITIAL_PRICE: 50,
-		CURRENT_PRICE: 50,
+		MAX_LEVEL: 25,
+		INITIAL_PRICE: 25, # Increased from 5
+		CURRENT_PRICE: 25,
 	},
 	Upgrades.MinRewardColumns: {
 		NAME: "Min Rewards Columns",
@@ -228,39 +490,39 @@ var upgrade_data: Dictionary[Upgrades, Dictionary] = {
 		VALUE_PER_LEVEL: 1,
 		CURRENT_LEVEL: 0,
 		MAX_LEVEL: 6,
-		INITIAL_PRICE: 100,
-		CURRENT_PRICE: 100,
+		INITIAL_PRICE: 150, # Increased from 20
+		CURRENT_PRICE: 150,
 	},
 	Upgrades.Customers: {
 		NAME: "Customers",
-		DESCRIPTION: "+[$5 / secs]",
+		DESCRIPTION: "+[$2.5 / secs]", # Reduced from 2.5
 		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 5,
+		VALUE_PER_LEVEL: 1.5,
 		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 10,
-		INITIAL_PRICE: 15,
+		MAX_LEVEL: 15, # Increased max level
+		INITIAL_PRICE: 15, # Increased from 15
 		CURRENT_PRICE: 15,
 		UPGRADE_TYPE: UpgradeType.MoneyPerSecond,
 	},
 	Upgrades.PegsCanHavePrizesSpawnPercetange: {
 		NAME: "Pegs Can Have Prizes",
-		DESCRIPTION: "+2.5% Chance pegs have prizes",
+		DESCRIPTION: "+1.5% Chance pegs have prizes", # Reduced from 2.5%
 		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 0.025,
+		VALUE_PER_LEVEL: 0.015,
 		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 10,
-		INITIAL_PRICE: 100,
-		CURRENT_PRICE: 100,
+		MAX_LEVEL: 50, # Increased max level
+		INITIAL_PRICE: 200, # Increased from 40
+		CURRENT_PRICE: 200,
 	},
 	Upgrades.PegsPrizeAmount: {
 		NAME: "Max Peg prize amount",
-		DESCRIPTION: "+5% max prize amount for pegs",
+		DESCRIPTION: "+3% max prize amount for pegs", # Reduced from 5%
 		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 0.05,
+		VALUE_PER_LEVEL: 0.03,
 		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 10,
-		INITIAL_PRICE: 100,
-		CURRENT_PRICE: 100,
+		MAX_LEVEL: 15, # Increased max level
+		INITIAL_PRICE: 350, # Increased from 50
+		CURRENT_PRICE: 350,
 	},
 	Upgrades.PrizesCanBeClaimedXTimes: {
 		NAME: "Prizes can be claimed multiple times",
@@ -268,9 +530,9 @@ var upgrade_data: Dictionary[Upgrades, Dictionary] = {
 		INITIAL_VALUE: 0,
 		VALUE_PER_LEVEL: 1,
 		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 10,
-		INITIAL_PRICE: 100,
-		CURRENT_PRICE: 100,
+		MAX_LEVEL: 15, # Increased max level
+		INITIAL_PRICE: 800, # Increased from 100
+		CURRENT_PRICE: 800,
 	},
 	Upgrades.PrizesCanBeClaimedXTimesPerPeg: {
 		NAME: "Peg Prizes can be claimed multiple times",
@@ -278,11 +540,18 @@ var upgrade_data: Dictionary[Upgrades, Dictionary] = {
 		INITIAL_VALUE: 0,
 		VALUE_PER_LEVEL: 1,
 		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 10,
-		INITIAL_PRICE: 100,
-		CURRENT_PRICE: 100,
+		MAX_LEVEL: 15, # Increased max level
+		INITIAL_PRICE: 1000, # Increased from 100
+		CURRENT_PRICE: 1000,
 	},
 }
+
+var upgrades_data_clone: Dictionary
+func _ready() -> void:
+	upgrades_data_clone = upgrade_data.duplicate(true)
+
+func is_upgrade_money_per_second(upgrade: Upgrades) -> bool:
+	return upgrade_data.get(upgrade).get_or_add(UPGRADE_TYPE, UpgradeType.Gameplay) == UpgradeType.MoneyPerSecond
 
 func calculate_per_second_money() -> int:
 	var sum = 0
@@ -292,7 +561,7 @@ func calculate_per_second_money() -> int:
 			sum+= get_upgrade_current_value(upgrade)
 	return sum
 
-func get_upgrade_current_cost(upgrade: Upgrades) -> int:
+func get_upgrade_next_cost(upgrade: Upgrades) -> int:
 	var level :int= upgrade_data.get(upgrade).get(CURRENT_LEVEL)
 	var initial_price: int= upgrade_data.get(upgrade).get(INITIAL_PRICE)
 	return initial_price + (level * initial_price)
@@ -310,12 +579,8 @@ func get_upgrade_current_level(upgrade: Upgrades) -> int:
 func on_upgrade_level_up(upgrade: Upgrades):
 	if get_upgrade_current_level(upgrade) >= get_upgrade_max_level(upgrade):
 		return
-	money-= upgrade_data.get(upgrade).get(CURRENT_PRICE)
+	money-= get_upgrade_next_cost(upgrade)
 	upgrade_data.get(upgrade).set(CURRENT_LEVEL, upgrade_data.get(upgrade).get_or_add(CURRENT_LEVEL, 0) + 1)
-	upgrade_data.get(upgrade).set(
-		CURRENT_PRICE, 
-		upgrade_data.get(upgrade).get(CURRENT_PRICE) + upgrade_data.get(upgrade).get(INITIAL_PRICE)
-	)
 	
 func get_upgrade_name(upgrade: Upgrades) -> String:
 	var _name: String = upgrade_data.get(upgrade).get_or_add(NAME, "")
@@ -328,6 +593,9 @@ func get_upgrade_description(upgrade: Upgrades) -> String:
 func get_upgrade_max_level(upgrade: Upgrades) -> int:
 	var upgrade_level: int = upgrade_data.get(upgrade).get_or_add(MAX_LEVEL, 1)
 	return upgrade_level
+
+func request_sfx(sfx: AudioLibrary.SoundFxs, volumn_db: float = 0.0) -> void:
+	sound_fx_request.emit(sfx, volumn_db)
 
 
 func has_upgrade(upgrade: Upgrades) -> bool:
@@ -346,6 +614,11 @@ func should_upgrade_be_triggered_chance(upgrade: Upgrades) -> bool:
 		return false
 	var actual_spawn_percentage: float = Game.get_upgrade_current_value(upgrade)
 	return rng.randf_range(0, 1) < actual_spawn_percentage
+	
+	
+func should_negative_upgrade_be_triggered_chance(upgrade: Upgrades) -> bool:
+	var actual_spawn_percentage: float = Game.get_upgrade_current_value(upgrade)
+	return rng.randf_range(0, 1) < actual_spawn_percentage
 
 func change_to_upgrades_scene():
 	change_scene_request.emit(GameRoot.Scene.Upgrades)
@@ -354,8 +627,20 @@ func change_to_upgrades_scene():
 func change_to_pachinko_scene():
 	change_scene_request.emit(GameRoot.Scene.GameBoard)
 
+func change_to_prestige_scene():
+	if !has_upgrade(Game.Upgrades.KeepUpgradesOnPrestige):
+		Game.reset_all_upgrades()
+	if has_upgrade(Game.Upgrades.KeepMoneyOnPresstige):
+		Game.money = Game.money * get_upgrade_current_value(Game.Upgrades.KeepMoneyOnPresstige)
+	else:
+		Game.money = 0
+	change_scene_request.emit(GameRoot.Scene.Prestige)
+
+
 func get_current_level_base_reward() -> int:
-	return 10
+	if has_upgrade(Game.Upgrades.BaseLevelRewardsUpX):
+		return base_level_reward * get_upgrade_current_value(Game.Upgrades.BaseLevelRewardsUpX)
+	return base_level_reward
 
 func format_scientific(num: int) -> String:
 	var exponent = 0

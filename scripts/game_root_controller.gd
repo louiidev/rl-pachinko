@@ -5,32 +5,40 @@ class_name GameRoot extends Node2D
 
 @onready var current_scene: Node2D = $CurrentScene
 @onready var transition: Transition = $Transition
+@onready var settings_menu: Control = $Settings
 
 enum Scene {
 	GameBoard,
 	Upgrades,
+	Prestige
 }
 @onready var scenes: Dictionary[Scene, PackedScene] = {
 	Scene.GameBoard: preload("res://scenes/Main.tscn"),
-	Scene.Upgrades: preload("res://scenes/Upgrades.tscn")
+	Scene.Upgrades: preload("res://scenes/Upgrades.tscn"),
+	Scene.Prestige: preload("res://scenes/Prestige.tscn")
+	
 }
 
 @onready var scene_names: Dictionary[Scene, String] = {
 	Scene.GameBoard: "PACHINKO!",
 	Scene.Upgrades: "UPGRADES",
+	Scene.Prestige: "PRESTIGE",
 }
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(Color.html("#222034"))
 	current_scene.add_child(scenes[start_scene].instantiate())
+	settings_menu.hide()
 	Game.change_scene_request.connect(chance_scene_request)
-	
 
 func hide_transition():
 	transition.end_transition()
 	
 	
-
+func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("settings"):
+		settings_menu.visible = !settings_menu.visible
+		get_tree().paused = settings_menu.visible
 func chance_scene_request(scene: Scene):
 	await transition.start_transition(Color.html("#433d76"), scene_names[scene])
 	for child in current_scene.get_children():

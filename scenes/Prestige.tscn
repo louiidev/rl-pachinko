@@ -1,0 +1,190 @@
+[gd_scene load_steps=10 format=3 uid="uid://brvtevyeux5rm"]
+
+[ext_resource type="Script" uid="uid://xrlwmi7jowag" path="res://scripts/prestige_scene.gd" id="1_t1ktp"]
+[ext_resource type="PackedScene" uid="uid://cmqq5tee3t843" path="res://prefabs/UpgradeNode.tscn" id="2_fpi2r"]
+[ext_resource type="Texture2D" uid="uid://d21285ecfpxf7" path="res://customer.png" id="3_1vqd0"]
+[ext_resource type="Texture2D" uid="uid://cgngbhqswoxqc" path="res://icons/ticket.png" id="4_gys6d"]
+[ext_resource type="Theme" uid="uid://du2jkyh4el8aw" path="res://ui/GameSceneTheme.tres" id="31_4mkk5"]
+[ext_resource type="LabelSettings" uid="uid://dcrxj6ropvsma" path="res://ui/LabelSettings/GameUILabelSettings.tres" id="32_qrlka"]
+[ext_resource type="Script" uid="uid://cik52rhd1w27g" path="res://scripts/button_shaker.gd" id="34_aq6w3"]
+[ext_resource type="Script" uid="uid://bttbimes54k4a" path="res://scripts/ui_shaker.gd" id="35_jjpss"]
+[ext_resource type="LabelSettings" uid="uid://cpd6oxhesfn23" path="res://ui/LabelSettings/GameUISmallLabel.tres" id="36_bkh2h"]
+
+[node name="Prestige" type="Node2D"]
+script = ExtResource("1_t1ktp")
+
+[node name="UpgradeNodes" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 974.0
+offset_top = 498.0
+offset_right = 2474.0
+offset_bottom = 1298.0
+mouse_filter = 1
+
+[node name="MagicBalls" parent="UpgradeNodes" instance=ExtResource("2_fpi2r")]
+upgrade = 34
+texture = ExtResource("3_1vqd0")
+
+[node name="AutoDropper" parent="UpgradeNodes/MagicBalls" instance=ExtResource("2_fpi2r")]
+position = Vector2(0, -120)
+upgrade = 36
+texture = ExtResource("3_1vqd0")
+
+[node name="AutoDropperRate" parent="UpgradeNodes/MagicBalls/AutoDropper" instance=ExtResource("2_fpi2r")]
+position = Vector2(0, -120)
+upgrade = 37
+texture = ExtResource("3_1vqd0")
+
+[node name="CannonMoves" parent="UpgradeNodes/MagicBalls/AutoDropper/AutoDropperRate" instance=ExtResource("2_fpi2r")]
+position = Vector2(120, 0)
+upgrade = 38
+texture = ExtResource("3_1vqd0")
+
+[node name="ExtraCannon" parent="UpgradeNodes/MagicBalls/AutoDropper/AutoDropperRate/CannonMoves" instance=ExtResource("2_fpi2r")]
+position = Vector2(120, 0)
+upgrade = 39
+texture = ExtResource("3_1vqd0")
+
+[node name="MiniBalls" parent="UpgradeNodes/MagicBalls" instance=ExtResource("2_fpi2r")]
+position = Vector2(0, 120)
+upgrade = 35
+texture = ExtResource("3_1vqd0")
+
+[node name="DoubleMoney" parent="UpgradeNodes/MagicBalls" instance=ExtResource("2_fpi2r")]
+position = Vector2(120, 0)
+upgrade = 31
+texture = ExtResource("3_1vqd0")
+
+[node name="TripleMoney" parent="UpgradeNodes/MagicBalls/DoubleMoney" instance=ExtResource("2_fpi2r")]
+position = Vector2(120, 0)
+upgrade = 32
+texture = ExtResource("3_1vqd0")
+
+[node name="QuadtrupleMoney" parent="UpgradeNodes/MagicBalls/DoubleMoney/TripleMoney" instance=ExtResource("2_fpi2r")]
+position = Vector2(120, 0)
+upgrade = 33
+texture = ExtResource("3_1vqd0")
+
+[node name="BaseLevelValueX" parent="UpgradeNodes/MagicBalls" instance=ExtResource("2_fpi2r")]
+position = Vector2(-120, 0)
+upgrade = 42
+texture = ExtResource("3_1vqd0")
+
+[node name="KeepMoneyOn" parent="UpgradeNodes/MagicBalls/BaseLevelValueX" instance=ExtResource("2_fpi2r")]
+position = Vector2(-120, 0)
+upgrade = 40
+texture = ExtResource("3_1vqd0")
+
+[node name="KeepUpgradesOnP" parent="UpgradeNodes/MagicBalls/BaseLevelValueX/KeepMoneyOn" instance=ExtResource("2_fpi2r")]
+position = Vector2(-120, 0)
+upgrade = 40
+texture = ExtResource("3_1vqd0")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+theme = ExtResource("31_4mkk5")
+
+[node name="CenterContainer" type="CenterContainer" parent="UI"]
+layout_mode = 1
+offset_right = 1920.0
+offset_bottom = 150.0
+
+[node name="Label" type="Label" parent="UI/CenterContainer"]
+layout_mode = 2
+text = "PRESTIGE"
+label_settings = ExtResource("32_qrlka")
+
+[node name="CenterContainer2" type="CenterContainer" parent="UI"]
+layout_mode = 1
+offset_left = 1.0
+offset_top = 860.0
+offset_right = 1921.0
+offset_bottom = 1079.0
+
+[node name="Control" type="Control" parent="UI/CenterContainer2"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="UI/CenterContainer2/Control"]
+layout_mode = 2
+offset_left = -198.0
+offset_top = -85.0
+offset_right = 197.0
+offset_bottom = 85.0
+pivot_offset = Vector2(194, 78)
+mouse_default_cursor_shape = 2
+text = "PACHINKO!"
+script = ExtResource("34_aq6w3")
+
+[node name="Label" type="Label" parent="UI/CenterContainer2/Control/Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -147.5
+offset_top = -35.0
+offset_right = 147.5
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "PACHINKO!"
+label_settings = ExtResource("32_qrlka")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Shaker" type="Control" parent="UI/CenterContainer2/Control/Button" node_paths=PackedStringArray("target")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("35_jjpss")
+target = NodePath("..")
+
+[node name="CenterContainer3" type="CenterContainer" parent="UI"]
+layout_mode = 0
+offset_left = 239.0
+offset_top = 860.0
+offset_right = 759.0
+offset_bottom = 1079.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/CenterContainer3"]
+layout_mode = 2
+
+[node name="MoneyLabel" type="Label" parent="UI/CenterContainer3/HBoxContainer"]
+layout_mode = 2
+text = "$000m"
+label_settings = ExtResource("36_bkh2h")
+
+[node name="CenterContainer4" type="CenterContainer" parent="UI"]
+layout_mode = 0
+offset_left = 1161.0
+offset_top = 860.0
+offset_right = 1681.0
+offset_bottom = 1079.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/CenterContainer4"]
+layout_mode = 2
+
+[node name="TokenLabel" type="Label" parent="UI/CenterContainer4/HBoxContainer"]
+layout_mode = 2
+text = "Tokens: 0/3"
+label_settings = ExtResource("36_bkh2h")
+
+[node name="TextureRect" type="TextureRect" parent="UI/CenterContainer4/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("4_gys6d")
+
+[node name="TextureRect2" type="TextureRect" parent="UI/CenterContainer4/HBoxContainer/TextureRect"]
+modulate = Color(0, 0, 0, 1)
+z_index = -1
+layout_mode = 2
+offset_top = 5.0
+offset_right = 110.0
+offset_bottom = 115.0
+texture = ExtResource("4_gys6d")

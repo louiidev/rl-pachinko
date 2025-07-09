@@ -3,6 +3,10 @@ extends Node
 @onready var hit_particle: PackedScene = preload("res://particles/HitParticle.tscn")
 
 
+
+
+
+
 func spawn_hit_particle(global_position: Vector2, direction: Vector2, color: Color):
 	var scene:= get_tree().root
 	var particle: GPUParticles2D = hit_particle.instantiate()
