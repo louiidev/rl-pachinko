@@ -1,17 +1,20 @@
-[gd_scene load_steps=9 format=3 uid="uid://cq50rgvn4uxnv"]
+[gd_scene load_steps=11 format=3 uid="uid://cq50rgvn4uxnv"]
 
 [ext_resource type="Script" uid="uid://dancjusrisc78" path="res://scripts/game_root_controller.gd" id="1_8ao7o"]
 [ext_resource type="PackedScene" uid="uid://cx7stidp768o" path="res://prefabs/Transition.tscn" id="2_lkoyb"]
 [ext_resource type="Script" uid="uid://bgijdpd7y6546" path="res://scripts/global_audio_player.gd" id="3_kbynm"]
 [ext_resource type="Script" uid="uid://i0ncmvapuued" path="res://scripts/audio/audio_library.gd" id="4_tnfu1"]
+[ext_resource type="Script" uid="uid://cbbt56s23afrb" path="res://scenes/music_player.gd" id="5_foumo"]
 [ext_resource type="Theme" uid="uid://du2jkyh4el8aw" path="res://ui/GameSceneTheme.tres" id="5_v7i1n"]
 [ext_resource type="LabelSettings" uid="uid://cpd6oxhesfn23" path="res://ui/LabelSettings/GameUISmallLabel.tres" id="6_653ys"]
 [ext_resource type="LabelSettings" uid="uid://dcrxj6ropvsma" path="res://ui/LabelSettings/GameUILabelSettings.tres" id="6_it2jm"]
 [ext_resource type="Script" uid="uid://6n1v3pk00vuj" path="res://scripts/volumn_slider.gd" id="7_p13ka"]
+[ext_resource type="PackedScene" uid="uid://bnom3ilambl0v" path="res://prefabs/CustomButton.tscn" id="10_d5ocq"]
 
 [node name="GameRoot" type="Node2D"]
 process_mode = 3
 script = ExtResource("1_8ao7o")
+start_scene = 3
 
 [node name="CurrentScene" type="Node2D" parent="."]
 
@@ -26,8 +29,13 @@ script = ExtResource("3_kbynm")
 bus = &"Sfx"
 script = ExtResource("4_tnfu1")
 
+[node name="MusicPlayer" type="AudioStreamPlayer2D" parent="GlobalAudioPlayer"]
+bus = &"Music"
+script = ExtResource("5_foumo")
+
 [node name="Settings" type="CenterContainer" parent="."]
 process_mode = 2
+z_index = 100
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -82,7 +90,7 @@ max_value = 1.0
 step = 0.001
 value = 1.0
 script = ExtResource("7_p13ka")
-bus_name = "Master"
+bus_name = "Music"
 
 [node name="Master3" type="Label" parent="Settings/PanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -95,4 +103,14 @@ max_value = 1.0
 step = 0.001
 value = 1.0
 script = ExtResource("7_p13ka")
-bus_name = "Master"
+bus_name = "Sfx"
+
+[node name="Label3" type="Label" parent="Settings/PanelContainer/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="CustomBtn" parent="Settings/PanelContainer/VBoxContainer" instance=ExtResource("10_d5ocq")]
+custom_minimum_size = Vector2(650, 156)
+layout_mode = 2
+label = "Exit"
+variant = 1

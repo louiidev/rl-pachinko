@@ -12,8 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://cm2qtqr3qqv1j" path="res://icons/max-tokens.png" id="5_4us53"]
 [ext_resource type="Texture2D" uid="uid://cyegnf8dncn04" path="res://icons/less-negative-pegs.png" id="5_x5oev"]
 [ext_resource type="Texture2D" uid="uid://d21285ecfpxf7" path="res://customer.png" id="8_jwdw3"]
+[ext_resource type="Texture2D" uid="uid://b3rwrf5e1p7i4" path="res://icons/auto-dropper-down.png" id="8_x5oev"]
 [ext_resource type="Texture2D" uid="uid://x1g18ke04r4f" path="res://icons/potatochip_green.png" id="9_qk3q1"]
-[ext_resource type="Texture2D" uid="uid://bak7a3w4dnkou" path="res://icons/extra-balls.png" id="9_ws61t"]
 [ext_resource type="Texture2D" uid="uid://cpb5me21ldg2e" path="res://icons/prizes-claimed-amount.png" id="10_4jcny"]
 [ext_resource type="Texture2D" uid="uid://2n66gux860ds" path="res://icons/pegs-prize-claimed-amount.png" id="10_hxoeu"]
 [ext_resource type="Texture2D" uid="uid://ctp2mcn56qkna" path="res://icons/decor.png" id="10_iypik"]
@@ -90,8 +90,8 @@ texture = ExtResource("5_4us53")
 
 [node name="Balls Per Game" parent="UpgradeNodes/Customers" instance=ExtResource("1_db6p7")]
 position = Vector2(120, 0)
-upgrade = 2
-texture = ExtResource("9_ws61t")
+upgrade = 37
+texture = ExtResource("8_x5oev")
 
 [node name="Pegs Can Have prizes Percetange" parent="UpgradeNodes/Customers/Balls Per Game" instance=ExtResource("1_db6p7")]
 position = Vector2(120, 0)

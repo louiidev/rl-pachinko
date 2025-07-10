@@ -66,12 +66,11 @@ func show_next_nodes(build_lines_always: bool = false):
 				line.add_point(Vector2.ZERO)
 				line.add_point(child.position)
 				self.add_child.call_deferred(line)
-		
-
+		else:
+			node.hide()
 
 func is_upgrade_node_instance(node: Node) -> bool:
 	return node.get_script() != null && node.get_script().get_global_name() == "UpgradeNode"
-
 
 		
 func hide_children_recursively():
@@ -80,7 +79,6 @@ func hide_children_recursively():
 			continue
 		var node: UpgradeNode = child
 		
-		node.hide_children_recursively()
 		node.hide()
 		
 
@@ -131,6 +129,8 @@ func on_upgrade():
 
 	if Game.get_upgrade_current_level(upgrade) == Game.get_upgrade_max_level(upgrade):
 		tick.show()
+		
+
 
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
@@ -144,8 +144,11 @@ func _process(_delta: float) -> void:
 		if !rect.has_point(get_global_mouse_position()):
 			timer.start(0.15)
 			
+			
+			
+	var money_type : int = Game.tokens if Game.is_upgrade_prestige_upgrade(upgrade) else Game.money
 		
-	button.disabled = Game.get_upgrade_next_cost(upgrade) > Game.money || Game.get_upgrade_current_level(upgrade) >= Game.get_upgrade_max_level(upgrade)
+	button.disabled = Game.get_upgrade_next_cost(upgrade) > money_type || Game.get_upgrade_current_level(upgrade) >= Game.get_upgrade_max_level(upgrade)
 	
 	if button.disabled:
 		border.modulate = Color.GREEN if Game.get_upgrade_current_level(upgrade) >= Game.get_upgrade_max_level(upgrade) else Color.DARK_RED 

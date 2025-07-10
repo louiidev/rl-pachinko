@@ -18,9 +18,15 @@ var max_claim_amount: int
 func _ready() -> void:
 	area.body_entered.connect(on_ball_entered)
 	max_claim_amount = 1 + Game.get_upgrade_current_level(Game.Upgrades.PrizesCanBeClaimedXTimes)
-	
-func set_prize(prize_amount: int):
-	prize = prize_amount
+	label.modulate = Color.WHITE
+	label.text = "$0"
+
+func set_prize(prize_amount: int = 0):
+	claimed_amount = 0
+	if prize_amount == 0:
+		var max_level_reward = Game.get_current_level_base_reward() + ceili(Game.get_current_level_base_reward() * Game.get_upgrade_current_value(Game.Upgrades.MaxRewardAmountPercentage))
+		prize = Game.rng.randi_range(1, max_level_reward)
+		
 	label.visible = true
 	if prize_amount < 0:
 		label.modulate = Color.RED
@@ -50,9 +56,15 @@ func on_ball_entered(body: Node2D):
 			token.hide()
 			on_ball_collected_token.emit(global_position)
 		else:
+			on_ball_collected.emit(prize, global_position, ball.ball_type, ball.ball_variant)
+			
 			if claimed_amount >= max_claim_amount:
-				label.visible = false
-				on_ball_collected.emit(prize, global_position, ball.ball_type, ball.ball_variant)
+				if Game.has_upgrade(Game.Upgrades.PrizesAlwaysRespawn):
+					set_prize()
+					
+				else:
+					label.visible = false
+				
 		
 	else:
 		claimed_amount += 1

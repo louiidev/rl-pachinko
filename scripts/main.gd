@@ -4,10 +4,10 @@ extends Node2D
 @onready var ball_scene: PackedScene = preload("res://prefabs/Ball.tscn")
 
 
-@onready var quick_restart_btn: Button = $UI/GameInfo/QuickRestartButtonContainer/QuickRestartButton
-@onready var upgrades_btn: Button = $UI/GameInfo/UpgradeBtnContainer/UpgradesButton
+@onready var upgrades_btn: CustomBtn = $UI/GameInfo/UpgradesBtn
+@onready var quick_restart_btn: CustomBtn = $UI/GameInfo/QuickRestartBtn
 @onready var money_label: Label = $UI/GameInfo/Money
-@onready var balls_label: Label = $UI/GameInfo/Balls
+@onready var highscore_label: Label = $UI/GameInfo/Highscore
 
 
 @onready var cannon_container = $Board/CannonContainer
@@ -17,21 +17,22 @@ extends Node2D
 @onready var balls_container: Node2D = $BallsContainer
 
 @onready var layout: Layout = $Board/Layout
+@onready var board: Node2D = $Board
 @onready var board_walls: Sprite2D = $Board/Walls
 
 @onready var sfx_player: AudioLibrary = $SfxPlayer
 
 var id_counter: int = 0
 
-var balls_left: int = 0
 
 var queue_restart: bool = false
 
 
 func _ready() -> void:
 	setup_level()
-	quick_restart_btn.pressed.connect(quick_reset_btn)
-	upgrades_btn.pressed.connect(upgrades_scene_btn)
+	highscore_label.text = "Highscore: $" + Game.format_number_precise(Game.highscore)
+	upgrades_btn.button.pressed.connect(upgrades_scene_btn)
+	quick_restart_btn.button.pressed.connect(quick_reset_btn)
 	if Game.has_upgrade(Game.Upgrades.ExtraCannon):
 		if Game.get_upgrade_current_value(Game.Upgrades.ExtraCannon) > 1:
 			var cannon: Cannon = cannon_prefab.instantiate()
@@ -44,28 +45,15 @@ func _ready() -> void:
 
 
 func quick_reset_btn():
-	if Game.money_this_game > Game.highscore:
-		Game.highscore = Game.money_this_game  
 	Game.request_sfx(AudioLibrary.SoundFxs.Click)
 	Game.change_to_pachinko_scene()
 	
 	
 func upgrades_scene_btn():
-	print("CLICKED")
-	if Game.money_this_game > Game.highscore:
-		Game.highscore = Game.money_this_game  
 	Game.request_sfx(AudioLibrary.SoundFxs.Click)
 	Game.change_to_upgrades_scene()
 	
 	
-func check_level_completed():
-	if balls_left == 0 && balls_container.get_child_count() == 0:
-		quick_restart_btn.show()
-		if queue_restart:
-			Game.change_to_pachinko_scene()
-	else:
-		var timer:= get_tree().create_timer(0.15)
-		timer.timeout.connect(check_level_completed)
 
 
 func ball_hit_peg(ball_global_pos: Vector2, volumn_db: float):
@@ -82,22 +70,16 @@ func listen_to_pegs_hit():
 		peg.ball_hit_peg.connect(ball_hit_peg)
 
 func setup_level():
-	Game.money_this_game = 0
 	layout.call_deferred("setup_pegs")
 	listen_to_pegs_hit.call_deferred()
-	quick_restart_btn.hide()
-	balls_left = Game.get_upgrade_current_value(Game.Upgrades.MaxBalls)
-	balls_label.text = "Balls left: " + str(balls_left)
 	
 	
 	var timer:= get_tree().create_timer(0.5)
-	timer.timeout.connect(check_level_completed)
 	
 	var possible_cup_indexes: Array[int] = []
 	var max_level_reward = Game.get_current_level_base_reward() + ceili(Game.get_current_level_base_reward() * Game.get_upgrade_current_value(Game.Upgrades.MaxRewardAmountPercentage))
-	
+
 	for cup: Cup in cups_container.get_children():
-		cup.set_prize(0)
 		possible_cup_indexes.push_back(cup.get_index())
 		cup.on_ball_collected.connect(cup_claimed_ball)
 		cup.on_ball_collected_no_prize.connect(cup_claimed_ball_no_prize)
@@ -119,7 +101,7 @@ func setup_level():
 		if Game.tokens < Game.get_upgrade_current_value(Game.Upgrades.MaxTokens) && Game.should_upgrade_be_triggered_chance(Game.Upgrades.TokensCanSpawnPercentage):
 			cup.set_token()
 		else:
-			cup.set_prize(Game.rng.randi_range(1, max_level_reward))
+			cup.set_prize()
 		possible_cup_indexes.remove_at(r_index)
 
 
@@ -159,7 +141,7 @@ func cup_claimed_ball(reward_amount: int, g_position: Vector2, ball_type: Ball.B
 	
 	Game.add_money(upgrade_amount)
 	
-	money_label.text = "$" + str(Game.money)
+	
 	if reward_amount >= 0:
 		PopupManager.new_money_text(upgrade_amount, g_position)
 	else:
@@ -168,8 +150,6 @@ func cup_claimed_ball(reward_amount: int, g_position: Vector2, ball_type: Ball.B
 		cup_claimed_ball_no_prize()
 	elif Game.should_upgrade_be_triggered_chance(Game.Upgrades.ChanceToSpawnBallOnPrizeClaim) && balls_container.get_child_count() < 50:
 		spawn_ball()
-	elif balls_left > 0 && !has_prizes_left():
-		quick_restart_btn.show()
 		
 
 func spawn_ball_peg(pos: Vector2, variant: Ball.BallVariant = Ball.BallVariant.Normal):
@@ -183,6 +163,7 @@ func spawn_ball_peg(pos: Vector2, variant: Ball.BallVariant = Ball.BallVariant.N
 	ball.global_position = pos
 	ball.id = id_counter
 	id_counter+= 1
+	ParticleManager.spawn_smoke_particle(ball.global_position)
 
 func spawn_ball():
 	for cannon: Cannon in cannon_container.get_children():
@@ -203,36 +184,25 @@ func spawn_ball():
 
 var autodrop_rate:= Game.get_upgrade_current_value(Game.Upgrades.AutoDropperRate)
 
-
 var was_paused = false
 func _process(_delta: float) -> void:	
-	
+	money_label.text = "Money: $" + Game.format_number_precise(Game.money)
 	autodrop_rate-= _delta
 	if autodrop_rate <= 0.0:
 		autodrop_rate = Game.get_upgrade_current_value(Game.Upgrades.AutoDropperRate)
-		if Game.has_upgrade(Game.Upgrades.AutoDropper) && balls_left > 0:
-			balls_left-=1
-			balls_label.text = "Balls left: " + str(balls_left)
+		if Game.has_upgrade(Game.Upgrades.AutoDropper):
 			spawn_ball()
 	
-	money_label.text = "Money this round: $" + Game.format_number_precise(Game.money_this_game)
-	if balls_left > 0:
-		if Input.is_action_just_pressed("left_click"):
-			var rect:= board_walls.get_rect()
-			var global_rect = Rect2(board_walls.global_position - rect.size * 0.5 - Vector2(0, 200), rect.size + Vector2(0, 200))
-			if global_rect.has_point(get_global_mouse_position()):
-				balls_left-=1
-				balls_label.text = "Balls left: " + str(balls_left)
-				spawn_ball()
-				
-		if Input.is_action_just_pressed("space"):
-			balls_left-=1
-			balls_label.text = "Balls left: " + str(balls_left)
+	if Input.is_action_just_pressed("left_click"):
+		var rect:= board_walls.get_rect()
+		var global_rect = Rect2(board_walls.global_position - rect.size * 0.5 - Vector2(0, 200), rect.size + Vector2(0, 200))
+		if global_rect.has_point(get_global_mouse_position()):
 			spawn_ball()
+				
+	if Input.is_action_just_pressed("space"):
+		
+		spawn_ball()
 	
 		
 	if Input.is_action_just_pressed("restart"):
-		if balls_left == 0 && balls_container.get_child_count() == 0:
-			Game.change_to_pachinko_scene()
-		else:
-			queue_restart = true
+		Game.change_to_pachinko_scene()

@@ -1,40 +1,18 @@
-[gd_scene load_steps=12 format=3 uid="uid://4r8qvx2odoep"]
+[gd_scene load_steps=10 format=3 uid="uid://4r8qvx2odoep"]
 
 [ext_resource type="Script" uid="uid://ba4823pre2yl7" path="res://scripts/main.gd" id="1_rgh2o"]
 [ext_resource type="LabelSettings" uid="uid://dcrxj6ropvsma" path="res://ui/LabelSettings/GameUILabelSettings.tres" id="2_50glp"]
 [ext_resource type="Theme" uid="uid://du2jkyh4el8aw" path="res://ui/GameSceneTheme.tres" id="2_vy5pj"]
 [ext_resource type="LabelSettings" uid="uid://cpd6oxhesfn23" path="res://ui/LabelSettings/GameUISmallLabel.tres" id="3_lhr70"]
-[ext_resource type="Script" uid="uid://cik52rhd1w27g" path="res://scripts/button_shaker.gd" id="4_jlsqs"]
-[ext_resource type="Script" uid="uid://bttbimes54k4a" path="res://scripts/ui_shaker.gd" id="5_nxtc6"]
 [ext_resource type="Script" uid="uid://b01d20ljxxsjo" path="res://scripts/fps_label.gd" id="5_wp0k4"]
 [ext_resource type="PackedScene" uid="uid://ddceknw0yy6ty" path="res://prefabs/Board.tscn" id="6_c01mt"]
+[ext_resource type="PackedScene" uid="uid://bnom3ilambl0v" path="res://prefabs/CustomButton.tscn" id="7_lhr70"]
 [ext_resource type="Script" uid="uid://i0ncmvapuued" path="res://scripts/audio/audio_library.gd" id="9_q8u5g"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jlsqs"]
-content_margin_left = 50.0
-content_margin_top = 50.0
-content_margin_right = 50.0
-content_margin_bottom = 50.0
-bg_color = Color(0.637818, 0.80971, 1, 1)
-border_width_left = 10
-border_width_top = 10
-border_width_right = 10
-border_width_bottom = 10
-border_color = Color(1, 1, 1, 1)
-corner_detail = 1
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nxtc6"]
-content_margin_left = 50.0
-content_margin_top = 50.0
-content_margin_right = 50.0
-content_margin_bottom = 50.0
-bg_color = Color(0.212454, 0.612057, 1, 1)
-border_width_left = 10
-border_width_top = 10
-border_width_right = 10
-border_width_bottom = 10
-border_color = Color(1, 1, 1, 1)
-corner_detail = 1
+[sub_resource type="Environment" id="Environment_jlsqs"]
+background_mode = 3
+glow_enabled = true
+glow_blend_mode = 1
 
 [node name="Main" type="Node2D"]
 process_mode = 1
@@ -43,9 +21,9 @@ script = ExtResource("1_rgh2o")
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 1402.0
+offset_left = 1379.0
 offset_top = 118.0
-offset_right = 1876.0
+offset_right = 1853.0
 offset_bottom = 752.0
 
 [node name="GameInfo" type="VBoxContainer" parent="UI"]
@@ -59,110 +37,28 @@ theme = ExtResource("2_vy5pj")
 
 [node name="Money" type="Label" parent="UI/GameInfo"]
 layout_mode = 2
-text = "Money this round: $0"
+text = "Money: $0"
 label_settings = ExtResource("3_lhr70")
 
-[node name="Balls" type="Label" parent="UI/GameInfo"]
+[node name="UpgradesBtn" parent="UI/GameInfo" instance=ExtResource("7_lhr70")]
 layout_mode = 2
-text = "Balls: 3"
-label_settings = ExtResource("3_lhr70")
+label = "Upgrades"
+variant = 1
 
-[node name="UpgradeBtnContainer" type="Control" parent="UI/GameInfo"]
-custom_minimum_size = Vector2(0, 170)
+[node name="QuickRestartBtn" parent="UI/GameInfo" instance=ExtResource("7_lhr70")]
 layout_mode = 2
+label = "Quick Restart"
 
-[node name="UpgradesButton" type="Button" parent="UI/GameInfo/UpgradeBtnContainer"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -265.0
-offset_right = 200.0
-offset_bottom = 170.0
-grow_horizontal = 2
-pivot_offset = Vector2(256, 93)
-theme = ExtResource("2_vy5pj")
-theme_type_variation = &"Upgrade"
-text = "Upgrades"
-script = ExtResource("4_jlsqs")
-
-[node name="Balls" type="Label" parent="UI/GameInfo/UpgradeBtnContainer/UpgradesButton"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -215.0
-offset_top = -35.0
-offset_right = 215.0
-offset_bottom = 35.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Upgrades"
-label_settings = ExtResource("2_50glp")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Shaker" type="Control" parent="UI/GameInfo/UpgradeBtnContainer/UpgradesButton" node_paths=PackedStringArray("target")]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("5_nxtc6")
-target = NodePath("..")
-
-[node name="QuickRestartButtonContainer" type="Control" parent="UI/GameInfo"]
-custom_minimum_size = Vector2(0, 170)
-layout_mode = 2
-
-[node name="QuickRestartButton" type="Button" parent="UI/GameInfo/QuickRestartButtonContainer"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -265.0
-offset_right = 200.0
-offset_bottom = 170.0
-grow_horizontal = 2
-pivot_offset = Vector2(250, 79)
-theme = ExtResource("2_vy5pj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_jlsqs")
-theme_override_styles/normal = SubResource("StyleBoxFlat_nxtc6")
-text = "Quick Restart"
-script = ExtResource("4_jlsqs")
-
-[node name="Balls" type="Label" parent="UI/GameInfo/QuickRestartButtonContainer/QuickRestartButton"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -215.0
-offset_top = -35.0
-offset_right = 215.0
-offset_bottom = 35.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Quick Restart"
-label_settings = ExtResource("2_50glp")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Shaker" type="Control" parent="UI/GameInfo/QuickRestartButtonContainer/QuickRestartButton" node_paths=PackedStringArray("target")]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("5_nxtc6")
-target = NodePath("..")
-
-[node name="Label" type="Label" parent="UI/GameInfo"]
+[node name="FPSLabel" type="Label" parent="UI/GameInfo"]
 layout_mode = 2
 text = "FPS: 60"
 label_settings = ExtResource("2_50glp")
 script = ExtResource("5_wp0k4")
+
+[node name="Highscore" type="Label" parent="UI/GameInfo"]
+layout_mode = 2
+text = "HIGHSCORE: $0"
+label_settings = ExtResource("2_50glp")
 
 [node name="Board" parent="." instance=ExtResource("6_c01mt")]
 position = Vector2(-347, 30)
@@ -170,4 +66,8 @@ position = Vector2(-347, 30)
 [node name="BallsContainer" type="Node2D" parent="."]
 
 [node name="SfxPlayer" type="AudioStreamPlayer2D" parent="."]
+bus = &"Sfx"
 script = ExtResource("9_q8u5g")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_jlsqs")

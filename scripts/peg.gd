@@ -29,7 +29,8 @@ var colors: Array = [
 	Color.ORANGE,
 	Color.WEB_MAROON,
 	Color.AQUA,
-	Color.GOLD
+	Color.GOLD,
+	Color.SPRING_GREEN,
 ]
 
 func is_prize_active() -> bool:
@@ -75,22 +76,34 @@ func on_ball_hit(body: Node):
 			else:
 				PopupManager.negative_money_text(reward_amount, global_position)
 			claimed_amount+= 1
-			sprite.modulate = colors[max(Game.get_upgrade_current_level(Game.Upgrades.PrizesCanBeClaimedXTimesPerPeg) - claimed_amount, 0)]
+			sprite.modulate = colors[clamp(Game.get_upgrade_current_level(Game.Upgrades.PrizesCanBeClaimedXTimesPerPeg) - claimed_amount, 0, colors.size() - 1)]
 #			# add a timeout or something to prevent multiple hits in succession
 			Game.add_money(reward_amount)
 
 			if claimed_amount >= max_claim_amount:
-				prize_label.hide()
-				sprite.modulate = colors[0]
-				prize_disabled = true
-				await get_tree().create_timer(0.8).timeout
-				prize_disabled = false
-			
+				if Game.has_upgrade(Game.Upgrades.PegsAlwaysRespawn) && prize > 0:
+					set_prize()
+				else:
+					prize_label.hide()
+					sprite.modulate = colors[0]
+					prize_disabled = true
+					await get_tree().create_timer(0.8).timeout
+					prize_disabled = false
+				
 				
 
 func _ready() -> void:
 	area.body_entered.connect(on_ball_hit)
 	max_claim_amount = 1 + Game.get_upgrade_current_level(Game.Upgrades.PrizesCanBeClaimedXTimesPerPeg)
+
+
+func set_prize():
+		claimed_amount = 0
+		var level_reward = Game.get_current_level_base_reward() + ceili(Game.get_current_level_base_reward() * Game.get_upgrade_current_value(Game.Upgrades.PegsCanHavePrizesSpawnPercetange))
+		prize = Game.rng.randf_range(1, level_reward)
+		prize_label.text = "$" +str(prize)
+		prize_label.show()
+		sprite.modulate = colors[clamp(Game.get_upgrade_current_level(Game.Upgrades.PrizesCanBeClaimedXTimesPerPeg) - claimed_amount, 0, colors.size() - 1)]
 	
 func setup():
 	already_hit_ids = []
@@ -101,14 +114,10 @@ func setup():
 	prize_disabled = false
 	
 	if Game.should_upgrade_be_triggered_chance(Game.Upgrades.PegsCanHavePrizesSpawnPercetange):
-		var level_reward = Game.get_current_level_base_reward() + ceili(Game.get_current_level_base_reward() * Game.get_upgrade_current_value(Game.Upgrades.PegsCanHavePrizesSpawnPercetange))
-		prize = Game.rng.randf_range(1, level_reward)
-		prize_label.text = "$" +str(prize)
-		prize_label.show()
-		sprite.modulate = colors[max(Game.get_upgrade_current_level(Game.Upgrades.PrizesCanBeClaimedXTimesPerPeg) - claimed_amount, 0)]
+		set_prize()
 	elif Game.should_negative_upgrade_be_triggered_chance(Game.Upgrades.LessNegativePegs):
-		print("NEGATIVE PEG")
 		prize = Game.rng.randf_range(-Game.base_level_reward, -1)
 		prize_label.text = "-$" +str(abs(prize))
 		prize_label.show()
 		sprite.modulate = Color.RED
+		prize_label.modulate = Color.RED

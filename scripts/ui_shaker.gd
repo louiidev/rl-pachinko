@@ -16,16 +16,6 @@ extends Control
 
 @export var target: Control
 
-@export_category("Target")
-## If target list is left empty, will select either the parent or the children of the parent.
-@export var target_parent: bool = true
-## If target list is left empty, will either target the parent or the children of the parent.
-@export var targets: Array[Node] = []
-## If set, will call [add_motion] on those signals. Subscribes to signals of the target.
-@export var trigger_signals: Array[String]
-## If larger than 0, applies motion to "parent of the parent ..." instead of the target.
-## Useful when you want to listen for [trigger_signals] of target but apply motion to other nodes.
-@export var offset_target_level: int = 0
 
 @export_category("Motion")
 @export var min_motion_factor: float = 1.0
@@ -55,11 +45,6 @@ func _ready() -> void:
 	_original_target_values["rotation"] = target.rotation
 
 	
-func on_hover_exit():
-	add_motion(1.05)
-	
-
-
 func add_motion(motion_factor_increment: float = add_motion_default) -> void:
 	if motion_factor_increment == 0.0:
 		motion_factor_increment = max_motion_factor

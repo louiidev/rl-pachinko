@@ -48,6 +48,7 @@ position = Vector2(4.76837e-07, 0.5)
 texture = ExtResource("1_gk6bx")
 
 [node name="MagicParticles" type="GPUParticles2D" parent="."]
+visible = false
 texture = ExtResource("3_m1v6k")
 lifetime = 1.5
 process_material = SubResource("ParticleProcessMaterial_04gqb")

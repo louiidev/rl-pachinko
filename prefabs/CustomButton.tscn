@@ -1,0 +1,78 @@
+[gd_scene load_steps=10 format=3 uid="uid://bnom3ilambl0v"]
+
+[ext_resource type="StyleBox" uid="uid://cgjomhrut4s31" path="res://ui/Btn2Hover.tres" id="1_j7fmd"]
+[ext_resource type="Theme" uid="uid://du2jkyh4el8aw" path="res://ui/GameSceneTheme.tres" id="1_p6aqw"]
+[ext_resource type="Script" uid="uid://bsibv76dojy8c" path="res://scripts/custom_button.gd" id="2_h345s"]
+[ext_resource type="StyleBox" uid="uid://bkm7y67jrt44c" path="res://ui/Btn2.tres" id="2_p6aqw"]
+[ext_resource type="StyleBox" uid="uid://7ddqlvcb7v3l" path="res://ui/Btn2Disabled.tres" id="3_04esp"]
+[ext_resource type="Script" uid="uid://cik52rhd1w27g" path="res://scripts/button_shaker.gd" id="3_41g6t"]
+[ext_resource type="Script" uid="uid://bttbimes54k4a" path="res://scripts/ui_shaker.gd" id="4_h345s"]
+[ext_resource type="LabelSettings" uid="uid://dcrxj6ropvsma" path="res://ui/LabelSettings/GameUILabelSettings.tres" id="6_41g6t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_41g6t"]
+content_margin_left = 50.0
+content_margin_top = 50.0
+content_margin_right = 50.0
+content_margin_bottom = 50.0
+bg_color = Color(0.637818, 0.80971, 1, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(1, 1, 1, 1)
+corner_detail = 1
+
+[node name="CustomBtn" type="Control"]
+custom_minimum_size = Vector2(100, 156)
+layout_mode = 3
+anchors_preset = 0
+theme = ExtResource("1_p6aqw")
+script = ExtResource("2_h345s")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -78.0
+offset_right = 250.0
+offset_bottom = 78.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(320, 80)
+theme_override_styles/focus = SubResource("StyleBoxFlat_41g6t")
+theme_override_styles/disabled = ExtResource("3_04esp")
+theme_override_styles/hover = ExtResource("1_j7fmd")
+theme_override_styles/pressed = ExtResource("1_j7fmd")
+theme_override_styles/normal = ExtResource("2_p6aqw")
+text = "Label"
+script = ExtResource("3_41g6t")
+
+[node name="Shaker" type="Control" parent="Button" node_paths=PackedStringArray("target")]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("4_h345s")
+target = NodePath("..")
+metadata/_custom_type_script = "uid://bttbimes54k4a"
+
+[node name="Label" type="Label" parent="Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -62.0
+offset_top = -28.0
+offset_right = 62.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Label"
+label_settings = ExtResource("6_41g6t")
+horizontal_alignment = 1
+vertical_alignment = 1

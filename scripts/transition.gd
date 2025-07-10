@@ -7,13 +7,13 @@ class_name Transition extends Control
 
 const TRANSITION_TIME = 0.4
 
-func start_transition(color: Color, name: String) -> Signal:
+func start_transition(color: Color, name: String, hold_time: float = 0.8) -> Signal:
 	color_rect.color = color
 	var tween = create_tween()
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	tween.tween_property(color_rect.material, 'shader_parameter/circle_size', 0.0, TRANSITION_TIME)
 	label.text = name
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(hold_time).timeout
 	tween = create_tween()
 	label.show()
 	label.scale = Vector2.ZERO
@@ -22,7 +22,7 @@ func start_transition(color: Color, name: String) -> Signal:
 	tween.tween_property(label, 'scale', Vector2.ONE, 0.8)
 	
 	await tween.finished
-	await get_tree().create_timer(0.8).timeout
+	await get_tree().create_timer(hold_time).timeout
 
 	return tween.finished
 	

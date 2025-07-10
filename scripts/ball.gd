@@ -19,6 +19,8 @@ enum BallVariant {
 @export var mini_ball_physics_mat: PhysicsMaterial
 
 
+var glow_color: Color = Color(1.33, 1.33, 1.33, 1.0)
+
 var ball_type: = BallType.Normal
 var ball_variant = BallVariant.Normal
 
@@ -53,8 +55,47 @@ func set_magic_ball():
 	magic_particles.emitting = true
 	
 	
+	
 func _ready() -> void:
 	magic_particles.emitting = false
+
+
+func spawn_menu_ball():
+	position = Vector2(Game.rng.randf_range(-550, 550), 0)
+	ball_type = Game.rng.randi_range(0, BallType.size() - 1)
+	ball_variant = Game.rng.randi_range(0, BallVariant.size() - 1)
+	set_variant(ball_variant)
+	var scale:= Game.rng.randf_range(0.4, 3.0)
+	sprite.scale = Vector2(scale, scale)
+	shape.scale =  Vector2(scale, scale)
+	physics_material_override = mini_ball_physics_mat
+	
+	physics_material_override = mini_ball_physics_mat
+	set_glow()
+	
+	
+		
+	match ball_type:
+		BallType.Platinum:
+			sprite.modulate = Color.MEDIUM_PURPLE
+		BallType.Diamond:
+			sprite.modulate = Color.LIGHT_SKY_BLUE
+		BallType.Gold:
+			sprite.modulate = Color.GOLD
+		BallType.Silver:
+			sprite.modulate = Color.SNOW
+		BallType.Bronze:
+			sprite.modulate = Color.GOLDENROD
+
+	
+	
+	
+func set_glow():
+	if ball_type != BallType.Normal || ball_variant == BallVariant.Magic:
+		sprite.self_modulate = glow_color
+		if ball_type == BallType.Platinum:
+			sprite.self_modulate = Color(1.6, 1.6, 1.6)
+	
 
 func spawn(variant: BallVariant = BallVariant.Normal):
 	if Game.should_upgrade_be_triggered_chance(Game.Upgrades.PlatinumBallsSpawnPercentage):
@@ -68,12 +109,13 @@ func spawn(variant: BallVariant = BallVariant.Normal):
 		sprite.modulate = Color.GOLD
 	elif Game.should_upgrade_be_triggered_chance(Game.Upgrades.SilverBallsSpawnPercentage):
 		ball_type = BallType.Silver
-		sprite.modulate = Color.SILVER
+		sprite.modulate = Color.SNOW
 		
 	elif Game.should_upgrade_be_triggered_chance(Game.Upgrades.BronzeBallsSpawnPercentage):
 		ball_type = BallType.Bronze
 		sprite.modulate = Color.GOLDENROD
 		
+	set_glow()
 	set_variant(variant)
 
 func _process(delta):

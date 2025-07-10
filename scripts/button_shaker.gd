@@ -6,10 +6,12 @@ extends Button
 
 
 func hover():
-	shaker.add_motion()
+	if !disabled:
+		shaker.add_motion()
 
 func dehover():
-	shaker.add_motion(1.05)
+	if !disabled:
+		shaker.add_motion(1.05)
 	
 
 

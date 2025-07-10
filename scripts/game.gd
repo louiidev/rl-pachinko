@@ -5,11 +5,10 @@ signal change_scene_request(scene: GameRoot.Scene)
 signal sound_fx_request(sound: AudioLibrary.SoundFxs, volumn_db: float)
 
 var rng: = RandomNumberGenerator.new()
-var money = 1000
-var highscore = 0
-var money_this_game = 0
-var base_level_reward = 30
-var tokens = 0
+var money: int = 0
+var highscore: int = 0
+var base_level_reward: int = 30
+var tokens: int = 0
 
 enum Upgrades {
 	MaxRewardAmountPercentage,
@@ -56,7 +55,9 @@ enum Upgrades {
 	ExtraCannon,
 	KeepMoneyOnPresstige,
 	KeepUpgradesOnPrestige,
-	BaseLevelRewardsUpX
+	BaseLevelRewardsUpX,
+	PrizesAlwaysRespawn,
+	PegsAlwaysRespawn,
 }
 
 
@@ -74,6 +75,8 @@ enum UpgradeType { Gameplay, MoneyPerSecond }
 enum UpgradePrestigeType { Normal, Prestige }
 
 
+
+
 func add_money(amount: int):
 	var new_amount = amount
 	if amount > 0:
@@ -85,11 +88,11 @@ func add_money(amount: int):
 			new_amount = amount * 2
 	
 	Game.money+=new_amount
-	Game.money_this_game+=new_amount
-			
+	
+	if new_amount > highscore:
+		highscore = new_amount
 
 	Game.money = max(0, Game.money)
-	Game.money_this_game = max(0, Game.money_this_game)
 
 
 func reset_all_upgrades():
@@ -99,6 +102,30 @@ func reset_all_upgrades():
 			upgrade_data.set(upgrade, upgrades_data_clone.get(upgrade))
 	
 var upgrade_data: Dictionary[Upgrades, Dictionary] = {
+	Upgrades.PegsAlwaysRespawn: {
+		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
+		NAME: "Pegs will respawn after being claimed",
+		DESCRIPTION: "Peg respawns after claim",
+		INITIAL_VALUE: 1.0,
+		VALUE_PER_LEVEL: 1.0,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 1,
+		INITIAL_PRICE: 1, # 1 token
+		CURRENT_PRICE: 1,
+	},
+	Upgrades.PrizesAlwaysRespawn: {
+		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
+		NAME: "Prize will respawn after being claimed",
+		DESCRIPTION: "Prize respawns after claim",
+		INITIAL_VALUE: 1.0,
+		VALUE_PER_LEVEL: 1.0,
+		CURRENT_LEVEL: 0,
+		MAX_LEVEL: 1,
+		INITIAL_PRICE: 1, # 1 token
+		CURRENT_PRICE: 1,
+	},
+	
+	
 	# Prestige Upgrades (Token-based pricing)
 	Upgrades.DoubleMoneyEarned: {
 		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
@@ -141,8 +168,8 @@ var upgrade_data: Dictionary[Upgrades, Dictionary] = {
 		VALUE_PER_LEVEL: 0.01,
 		CURRENT_LEVEL: 0,
 		MAX_LEVEL: 5,
-		INITIAL_PRICE: 2, # 2 tokens
-		CURRENT_PRICE: 2,
+		INITIAL_PRICE: 1, # 2 tokens
+		CURRENT_PRICE: 1,
 	},
 	Upgrades.PegsHaveChanceToSpawnMiniBalls: {
 		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
@@ -161,21 +188,20 @@ var upgrade_data: Dictionary[Upgrades, Dictionary] = {
 		DESCRIPTION: "Automatically drops balls every 5 seconds",
 		INITIAL_VALUE: 0,
 		VALUE_PER_LEVEL: 1.0,
-		CURRENT_LEVEL:0,
+		CURRENT_LEVEL:1,
 		MAX_LEVEL: 1,
 		INITIAL_PRICE: 4, # 4 tokens
 		CURRENT_PRICE: 4,
 	},
 	Upgrades.AutoDropperRate: {
-		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
 		NAME: "Auto Dropper Rate",
 		DESCRIPTION: "-0.5 seconds from auto dropper rate",
-		INITIAL_VALUE: 2.5,
-		VALUE_PER_LEVEL: -0.5,
+		INITIAL_VALUE: 5,
+		VALUE_PER_LEVEL: -0.50,
 		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 4,
-		INITIAL_PRICE: 1, # 1 token
-		CURRENT_PRICE: 1,
+		MAX_LEVEL: 9,
+		INITIAL_PRICE: 100, # 1 token
+		CURRENT_PRICE: 100,
 	},
 	Upgrades.CannonMovesHorizontally: {
 		UPGRADE_PRESTIGE_TYPE: UpgradePrestigeType.Prestige,
@@ -254,9 +280,9 @@ var upgrade_data: Dictionary[Upgrades, Dictionary] = {
 	},
 	Upgrades.NewMachines: {
 		NAME: "New Machines",
-		DESCRIPTION: "+[$80 / secs]", # Halved from 160
+		DESCRIPTION: "+[$96 / secs]", # Halved from 160
 		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 80,
+		VALUE_PER_LEVEL: 96,
 		CURRENT_LEVEL: 0,
 		MAX_LEVEL: 10,
 		INITIAL_PRICE: 5000, # Increased from 960
@@ -265,9 +291,9 @@ var upgrade_data: Dictionary[Upgrades, Dictionary] = {
 	},
 	Upgrades.ShinyBalls: {
 		NAME: "Shiny Balls",
-		DESCRIPTION: "+[$40 / secs]", # Halved from 80
+		DESCRIPTION: "+[$48 / secs]", # Halved from 80
 		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 40,
+		VALUE_PER_LEVEL: 48,
 		CURRENT_LEVEL: 0,
 		MAX_LEVEL: 10,
 		INITIAL_PRICE: 2500, # Increased from 480
@@ -276,9 +302,9 @@ var upgrade_data: Dictionary[Upgrades, Dictionary] = {
 	},
 	Upgrades.VipLounge: {
 		NAME: "VIP Lounge",
-		DESCRIPTION: "+[$20 / secs]", # Halved from 40
+		DESCRIPTION: "+[$24 / secs]", # Halved from 40
 		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 20,
+		VALUE_PER_LEVEL: 24,
 		CURRENT_LEVEL: 0,
 		MAX_LEVEL: 10,
 		INITIAL_PRICE: 1200, # Increased from 240
@@ -287,9 +313,9 @@ var upgrade_data: Dictionary[Upgrades, Dictionary] = {
 	},
 	Upgrades.ComfySeats: {
 		NAME: "More Comfortable Seats",
-		DESCRIPTION: "+[$10 / secs]", # Halved from 20
+		DESCRIPTION: "+[$12 / secs]", # Halved from 20
 		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 10,
+		VALUE_PER_LEVEL: 12,
 		CURRENT_LEVEL: 0,
 		MAX_LEVEL: 10,
 		INITIAL_PRICE: 600, # Increased from 120
@@ -298,9 +324,9 @@ var upgrade_data: Dictionary[Upgrades, Dictionary] = {
 	},
 	Upgrades.DecorUpgrade: {
 		NAME: "Decor Upgrade",
-		DESCRIPTION: "+[$5 / secs]", # Halved from 10
+		DESCRIPTION: "+[$6 / secs]", # Halved from 10
 		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 5,
+		VALUE_PER_LEVEL: 6,
 		CURRENT_LEVEL: 0,
 		MAX_LEVEL: 10,
 		INITIAL_PRICE: 300, # Increased from 60
@@ -309,9 +335,9 @@ var upgrade_data: Dictionary[Upgrades, Dictionary] = {
 	},
 	Upgrades.FreeSnacks: {
 		NAME: "Free Snacks",
-		DESCRIPTION: "+[$2.5 / secs]", # Halved from 5
+		DESCRIPTION: "+[$3 / secs]", # Halved from 5
 		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 2.5,
+		VALUE_PER_LEVEL: 3,
 		CURRENT_LEVEL: 0,
 		MAX_LEVEL: 10,
 		INITIAL_PRICE: 150, # Increased from 30
@@ -495,13 +521,13 @@ var upgrade_data: Dictionary[Upgrades, Dictionary] = {
 	},
 	Upgrades.Customers: {
 		NAME: "Customers",
-		DESCRIPTION: "+[$2.5 / secs]", # Reduced from 2.5
+		DESCRIPTION: "+[$1 / secs]", # Reduced from 2.5
 		INITIAL_VALUE: 0,
-		VALUE_PER_LEVEL: 1.5,
+		VALUE_PER_LEVEL: 1,
 		CURRENT_LEVEL: 0,
 		MAX_LEVEL: 15, # Increased max level
-		INITIAL_PRICE: 15, # Increased from 15
-		CURRENT_PRICE: 15,
+		INITIAL_PRICE: 20, # Increased from 15
+		CURRENT_PRICE: 20,
 		UPGRADE_TYPE: UpgradeType.MoneyPerSecond,
 	},
 	Upgrades.PegsCanHavePrizesSpawnPercetange: {
@@ -540,15 +566,24 @@ var upgrade_data: Dictionary[Upgrades, Dictionary] = {
 		INITIAL_VALUE: 0,
 		VALUE_PER_LEVEL: 1,
 		CURRENT_LEVEL: 0,
-		MAX_LEVEL: 15, # Increased max level
+		MAX_LEVEL: 10, # Increased max level
 		INITIAL_PRICE: 1000, # Increased from 100
 		CURRENT_PRICE: 1000,
 	},
 }
 
+
+func debug_values():
+	money = 1000000
+	tokens = 1000
+
+
 var upgrades_data_clone: Dictionary
 func _ready() -> void:
+	get_tree().set_auto_accept_quit(false)
 	upgrades_data_clone = upgrade_data.duplicate(true)
+	#if EngineDebugger.is_active():
+		#debug_values()
 
 func is_upgrade_money_per_second(upgrade: Upgrades) -> bool:
 	return upgrade_data.get(upgrade).get_or_add(UPGRADE_TYPE, UpgradeType.Gameplay) == UpgradeType.MoneyPerSecond
@@ -579,12 +614,21 @@ func get_upgrade_current_level(upgrade: Upgrades) -> int:
 func on_upgrade_level_up(upgrade: Upgrades):
 	if get_upgrade_current_level(upgrade) >= get_upgrade_max_level(upgrade):
 		return
-	money-= get_upgrade_next_cost(upgrade)
+	if is_upgrade_prestige_upgrade(upgrade):
+		tokens-= get_upgrade_next_cost(upgrade)
+	else:
+		money-= get_upgrade_next_cost(upgrade)
+		
 	upgrade_data.get(upgrade).set(CURRENT_LEVEL, upgrade_data.get(upgrade).get_or_add(CURRENT_LEVEL, 0) + 1)
 	
 func get_upgrade_name(upgrade: Upgrades) -> String:
 	var _name: String = upgrade_data.get(upgrade).get_or_add(NAME, "")
 	return _name
+	
+	
+func is_upgrade_prestige_upgrade(upgrade: Upgrades) -> bool:
+	return upgrade_data.get(upgrade).get_or_add(UPGRADE_PRESTIGE_TYPE, UpgradePrestigeType.Normal) == UpgradePrestigeType.Prestige
+	
 	
 func get_upgrade_description(upgrade: Upgrades) -> String:
 	var description: String = upgrade_data.get(upgrade).get_or_add(DESCRIPTION, "")
@@ -621,10 +665,12 @@ func should_negative_upgrade_be_triggered_chance(upgrade: Upgrades) -> bool:
 	return rng.randf_range(0, 1) < actual_spawn_percentage
 
 func change_to_upgrades_scene():
+	save_game()
 	change_scene_request.emit(GameRoot.Scene.Upgrades)
 	
 
 func change_to_pachinko_scene():
+	save_game()
 	change_scene_request.emit(GameRoot.Scene.GameBoard)
 
 func change_to_prestige_scene():
@@ -650,11 +696,12 @@ func format_scientific(num: int) -> String:
 		value /= 10.0
 		exponent += 1
 	
-	# Format with 2 decimal places for the coefficient
+	# Format with 2 decimal places for the coefficient, using floor to round down
 	if value == int(value):
 		return "%de%d" % [int(value), exponent]
 	else:
-		return "%.2fe%d" % [value, exponent]
+		var floored_value = floor(value * 100.0) / 100.0  # Floor to 2 decimal places
+		return "%.2fe%d" % [floored_value, exponent]
 
 func format_number_precise(num: int, sci_threshold: int = 1000000000000000) -> String:
 	var suffixes = ["", "K", "M", "B", "T"]
@@ -676,4 +723,85 @@ func format_number_precise(num: int, sci_threshold: int = 1000000000000000) -> S
 		if value == int(value):
 			return str(int(value)) + suffixes[magnitude]
 		else:
-			return "%.1f%s" % [value, suffixes[magnitude]]
+			# Floor to 1 decimal place to round down
+			var floored_value = floor(value * 10.0) / 10.0
+			return "%.1f%s" % [floored_value, suffixes[magnitude]]
+
+var path: String = "user://savegame.save"
+
+func has_save() -> bool:
+	return FileAccess.file_exists(path)
+	
+	
+func save_game():
+	var save_file = FileAccess.open(path, FileAccess.WRITE)
+	
+	if save_file == null:
+		printerr("Error opening save file for writing")
+		return
+		
+	var dict: Dictionary = {
+		"upgrades": upgrade_data,
+		"money": money,
+		"tokens": tokens,
+		"settings": {
+			"sfx": AudioServer.get_bus_volume_linear(AudioServer.get_bus_index("Sfx")),
+			"music": AudioServer.get_bus_volume_linear(AudioServer.get_bus_index("Music")),
+			"master": AudioServer.get_bus_volume_linear(AudioServer.get_bus_index("Master")),
+		}
+	}
+	var json_string = JSON.stringify(dict)
+	save_file.store_string(json_string)
+	save_file.close()
+	print("Game saved successfully!")
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		if save_loaded:
+			save_game()
+		get_tree().quit() # default behavior
+
+
+var save_loaded: = false
+
+
+func load_save():
+	
+	if not FileAccess.file_exists(path):
+		print("Save file doesn't exist")
+		return
+	
+	
+	var save_file = FileAccess.open(path, FileAccess.READ)
+	if save_file == null:
+		print("Error opening save file for reading")
+		return
+	
+	var json_string = save_file.get_as_text()
+	save_file.close()
+	save_loaded = true
+	# Parse JSON back to dictionary
+	var json = JSON.new()
+	var parse_result = json.parse(json_string)
+	
+	if not parse_result == OK:
+		print("JSON Parse Error: ", json.get_error_message(), " in ", json_string, " at line ", json.get_error_line())
+		return
+	
+	var node_data: Dictionary = json.data
+	var raw_upgrades: Dictionary = node_data["upgrades"]
+	for key in raw_upgrades:
+		var int_key = int(key)  # JSON keys are strings, convert to int first
+		var upgrade_enum = int_key as Upgrades  # Convert int to enum
+		upgrade_data[upgrade_enum] = raw_upgrades[key] as Dictionary
+	
+	money = node_data["money"]
+	tokens = node_data["tokens"]
+	upgrades_data_clone = upgrade_data.duplicate(true)
+	
+	if node_data.has("settings"):
+		AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("Sfx"), node_data.get("settings").get("sfx"))
+		AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("Music"), node_data.get("settings").get("music"))
+		AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("Master"), node_data.get("settings").get("master"))
+	print("Game loaded successfully!")
