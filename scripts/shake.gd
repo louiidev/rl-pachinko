@@ -22,7 +22,7 @@ func apply_shake(addition: float = 0.0):
 	
 func _process(delta: float) -> void:
 	if shake_strength > 0:
-		shake_strength = lerpf(shake_strength, 0, shake_fade * delta)
+		shake_strength = lerpf(shake_strength, 0, shake_fade * Game.game_dt)
 		node_to_shake.global_position = original_g_position + random_offset()
 		if shake_strength <= 0:
 			node_to_shake.global_position = original_g_position

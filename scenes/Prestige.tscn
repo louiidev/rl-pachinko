@@ -1,12 +1,10 @@
-[gd_scene load_steps=21 format=3 uid="uid://brvtevyeux5rm"]
+[gd_scene load_steps=19 format=3 uid="uid://brvtevyeux5rm"]
 
 [ext_resource type="Script" uid="uid://xrlwmi7jowag" path="res://scripts/prestige_scene.gd" id="1_t1ktp"]
 [ext_resource type="PackedScene" uid="uid://cmqq5tee3t843" path="res://prefabs/UpgradeNode.tscn" id="2_fpi2r"]
 [ext_resource type="Texture2D" uid="uid://f1oqhb7bqccq" path="res://icons/magic-balls.png" id="3_nrupn"]
 [ext_resource type="Texture2D" uid="uid://cgngbhqswoxqc" path="res://icons/ticket.png" id="4_gys6d"]
-[ext_resource type="Texture2D" uid="uid://cirqvgcxx1rfn" path="res://icons/auto-dropper.png" id="4_u1f0y"]
 [ext_resource type="Texture2D" uid="uid://bclh2le8ol7my" path="res://icons/max-prize-percentage-amount.png" id="6_rulid"]
-[ext_resource type="Texture2D" uid="uid://dtybxrsxhuaul" path="res://icons/move-cannon.png" id="6_uqv5x"]
 [ext_resource type="Texture2D" uid="uid://chlb3n35yq7hm" path="res://icons/cannon-plus-1.png" id="7_4u7hf"]
 [ext_resource type="Texture2D" uid="uid://2n66gux860ds" path="res://icons/pegs-prize-claimed-amount.png" id="7_jpl1e"]
 [ext_resource type="Texture2D" uid="uid://da72x02o23p7q" path="res://icons/mini-balls.png" id="8_q6rye"]
@@ -82,18 +80,8 @@ position = Vector2(-120, 0)
 upgrade = 41
 texture = ExtResource("14_36cdx")
 
-[node name="AutoDropper" parent="UpgradeNodes/DoubleMoney" instance=ExtResource("2_fpi2r")]
+[node name="ExtraCannon" parent="UpgradeNodes/DoubleMoney" instance=ExtResource("2_fpi2r")]
 position = Vector2(0, -120)
-upgrade = 36
-texture = ExtResource("4_u1f0y")
-
-[node name="CannonMoves" parent="UpgradeNodes/DoubleMoney/AutoDropper" instance=ExtResource("2_fpi2r")]
-position = Vector2(0, -120)
-upgrade = 38
-texture = ExtResource("6_uqv5x")
-
-[node name="ExtraCannon" parent="UpgradeNodes/DoubleMoney/AutoDropper/CannonMoves" instance=ExtResource("2_fpi2r")]
-position = Vector2(120, 0)
 upgrade = 39
 texture = ExtResource("7_4u7hf")
 

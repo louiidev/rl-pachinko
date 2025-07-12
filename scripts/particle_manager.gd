@@ -1,6 +1,7 @@
 extends Node
 
 @onready var hit_particle: PackedScene = preload("res://particles/HitParticle.tscn")
+@onready var _splash_particle: PackedScene = preload("res://particles/SplashParticle.tscn")
 @onready var _smoke_particle: PackedScene = preload("res://particles/Smoke.tscn")
 
 
@@ -20,14 +21,22 @@ func _ready() -> void:
 	scene.call_deferred("add_child", child_container)
 	Game.change_scene_request.connect(clear_particles)
 
+
+func spawn_splash_particle(global_position: Vector2):
+	var particle: GPUParticles2D = _splash_particle.instantiate()
+	child_container.add_child(particle)
+	particle.global_position = global_position
+	particle.emitting = true
+	particle.one_shot = true
+	particle.finished.connect(particle.queue_free)
+	particle.restart()
+
 func spawn_smoke_particle(global_position: Vector2):
 	var particle: GPUParticles2D = _smoke_particle.instantiate()
 	child_container.add_child(particle)
 	particle.global_position = global_position
 	particle.emitting = true
 	particle.one_shot = true
-	
-
 	particle.finished.connect(particle.queue_free)
 	particle.restart()
 
@@ -37,7 +46,7 @@ func spawn_hit_particle(global_position: Vector2, direction: Vector2, color: Col
 	particle.global_position = global_position
 	particle.emitting = true
 	particle.one_shot = true
-	
+
 	#particle.explosiveness = 1.0
 	particle.lifetime = 0.3
 	var mat: ParticleProcessMaterial = particle.process_material

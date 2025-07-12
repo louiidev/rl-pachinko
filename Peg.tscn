@@ -1,8 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bnd1l3v1he3d7"]
+[gd_scene load_steps=11 format=3 uid="uid://bnd1l3v1he3d7"]
 
 [ext_resource type="Script" uid="uid://di0ofxe1lvlu3" path="res://scripts/peg.gd" id="1_4twx5"]
 [ext_resource type="Texture2D" uid="uid://dq6ognlcrqvic" path="res://peg.png" id="1_ulx75"]
 [ext_resource type="Script" uid="uid://b1nrdkd3n8wy8" path="res://scripts/shake.gd" id="3_bgr1e"]
+[ext_resource type="Shader" uid="uid://cyu8swetn38hr" path="res://Peg.gdshader" id="3_u87tu"]
+[ext_resource type="Texture2D" uid="uid://bnfq8xnds0da3" path="res://peg-background.png" id="3_ycv1x"]
+[ext_resource type="Texture2D" uid="uid://bsenph4htxpo8" path="res://peg-mask.png" id="4_7fsr5"]
 [ext_resource type="LabelSettings" uid="uid://cgxq5mw10evav" path="res://ui/LabelSettings/UpgradeNodeLabelSettings.tres" id="4_prgfs"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ulx75"]
@@ -12,17 +15,24 @@ bounce = 0.75
 [sub_resource type="CircleShape2D" id="CircleShape2D_r150o"]
 radius = 12.5
 
-[node name="Peg" type="StaticBody2D"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u87tu"]
+resource_local_to_scene = true
+shader = ExtResource("3_u87tu")
+shader_parameter/fill_percentage = 0.0
+
+[node name="Peg" type="AnimatableBody2D"]
 collision_layer = 4
 physics_material_override = SubResource("PhysicsMaterial_ulx75")
 script = ExtResource("1_4twx5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 scale = Vector2(0.76, 0.76)
 shape = SubResource("CircleShape2D_r150o")
 
 [node name="Sprite2D2" type="Sprite2D" parent="."]
 modulate = Color(0, 0, 0, 1)
+z_index = -1
 position = Vector2(0, 10)
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("1_ulx75")
@@ -31,8 +41,16 @@ texture = ExtResource("1_ulx75")
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("1_ulx75")
 
+[node name="Sprite2D4" type="Sprite2D" parent="Sprite2D"]
+texture = ExtResource("3_ycv1x")
+
+[node name="MaskContainer" type="Sprite2D" parent="Sprite2D"]
+material = SubResource("ShaderMaterial_u87tu")
+texture = ExtResource("4_7fsr5")
+
 [node name="Area2D" type="Area2D" parent="."]
-collision_layer = 0
+visible = false
+collision_layer = 512
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]

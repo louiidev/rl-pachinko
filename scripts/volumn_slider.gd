@@ -14,5 +14,5 @@ func on_value_changed(value: float):
 	AudioServer.set_bus_volume_linear(bus_index, value)
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	value = AudioServer.get_bus_volume_linear(bus_index)

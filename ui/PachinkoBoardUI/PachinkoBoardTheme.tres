@@ -1,0 +1,60 @@
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://ccse0vwtvn6ah"]
+
+[ext_resource type="FontFile" uid="uid://u7ldl4fncbjv" path="res://fonts/m6x11.ttf" id="1_cll3s"]
+[ext_resource type="StyleBox" uid="uid://c0y242nrsahb3" path="res://ui/DefaultBtnHover.tres" id="2_co1mj"]
+[ext_resource type="StyleBox" uid="uid://dfq64kx1ingte" path="res://ui/DefaultBtn.tres" id="3_b4bhw"]
+[ext_resource type="StyleBox" uid="uid://cmkdrwu86yenp" path="res://ui/PanelContainer.tres" id="4_vdx5x"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0lrwi"]
+content_margin_left = 50.0
+content_margin_top = 50.0
+content_margin_right = 50.0
+content_margin_bottom = 50.0
+bg_color = Color(0.327662, 0.156776, 3.36915e-07, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(1, 1, 1, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_corvw"]
+content_margin_left = 50.0
+content_margin_top = 50.0
+content_margin_right = 50.0
+content_margin_bottom = 50.0
+bg_color = Color(1, 0.704703, 0.494476, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(1, 1, 1, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4djqw"]
+content_margin_left = 20.0
+content_margin_top = 25.0
+content_margin_right = 20.0
+content_margin_bottom = 25.0
+bg_color = Color(0.895452, 0.471006, 0, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(1, 1, 1, 1)
+corner_detail = 1
+
+[resource]
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/constants/outline_size = 20
+Button/font_sizes/font_size = 64
+Button/fonts/font = ExtResource("1_cll3s")
+Button/styles/disabled = SubResource("StyleBoxFlat_0lrwi")
+Button/styles/focus = SubResource("StyleBoxFlat_corvw")
+Button/styles/hover = ExtResource("2_co1mj")
+Button/styles/normal = ExtResource("3_b4bhw")
+Button/styles/pressed = SubResource("StyleBoxFlat_4djqw")
+HBoxContainer/constants/separation = 30
+PanelContainer/styles/panel = ExtResource("4_vdx5x")
+VBoxContainer/constants/separation = 24

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cq50rgvn4uxnv"]
+[gd_scene load_steps=13 format=3 uid="uid://cq50rgvn4uxnv"]
 
 [ext_resource type="Script" uid="uid://dancjusrisc78" path="res://scripts/game_root_controller.gd" id="1_8ao7o"]
 [ext_resource type="PackedScene" uid="uid://cx7stidp768o" path="res://prefabs/Transition.tscn" id="2_lkoyb"]
@@ -8,8 +8,10 @@
 [ext_resource type="Theme" uid="uid://du2jkyh4el8aw" path="res://ui/GameSceneTheme.tres" id="5_v7i1n"]
 [ext_resource type="LabelSettings" uid="uid://cpd6oxhesfn23" path="res://ui/LabelSettings/GameUISmallLabel.tres" id="6_653ys"]
 [ext_resource type="LabelSettings" uid="uid://dcrxj6ropvsma" path="res://ui/LabelSettings/GameUILabelSettings.tres" id="6_it2jm"]
+[ext_resource type="Script" uid="uid://droggvvcbj5lp" path="res://scripts/settings.gd" id="7_4xyvw"]
 [ext_resource type="Script" uid="uid://6n1v3pk00vuj" path="res://scripts/volumn_slider.gd" id="7_p13ka"]
 [ext_resource type="PackedScene" uid="uid://bnom3ilambl0v" path="res://prefabs/CustomButton.tscn" id="10_d5ocq"]
+[ext_resource type="Script" uid="uid://b01d20ljxxsjo" path="res://scripts/fps_label.gd" id="11_bgj4p"]
 
 [node name="GameRoot" type="Node2D"]
 process_mode = 3
@@ -19,6 +21,7 @@ start_scene = 3
 [node name="CurrentScene" type="Node2D" parent="."]
 
 [node name="Transition" parent="." instance=ExtResource("2_lkoyb")]
+process_mode = 3
 z_index = 100
 offset_bottom = 480.0
 
@@ -35,6 +38,7 @@ script = ExtResource("5_foumo")
 
 [node name="Settings" type="CenterContainer" parent="."]
 process_mode = 2
+visible = false
 z_index = 100
 anchors_preset = 8
 anchor_left = 0.5
@@ -48,6 +52,7 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("5_v7i1n")
+script = ExtResource("7_4xyvw")
 
 [node name="PanelContainer" type="PanelContainer" parent="Settings"]
 custom_minimum_size = Vector2(550, 600)
@@ -79,7 +84,7 @@ value = 1.0
 script = ExtResource("7_p13ka")
 bus_name = "Master"
 
-[node name="Master2" type="Label" parent="Settings/PanelContainer/VBoxContainer"]
+[node name="Music" type="Label" parent="Settings/PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "Music"
 label_settings = ExtResource("6_653ys")
@@ -92,7 +97,7 @@ value = 1.0
 script = ExtResource("7_p13ka")
 bus_name = "Music"
 
-[node name="Master3" type="Label" parent="Settings/PanelContainer/VBoxContainer"]
+[node name="SoundFX" type="Label" parent="Settings/PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "Sound Effects"
 label_settings = ExtResource("6_653ys")
@@ -105,12 +110,38 @@ value = 1.0
 script = ExtResource("7_p13ka")
 bus_name = "Sfx"
 
-[node name="Label3" type="Label" parent="Settings/PanelContainer/VBoxContainer"]
+[node name="DisableTransAnimations" type="CheckButton" parent="Settings/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Disable Transition Animation"
+
+[node name="Label5" type="Label" parent="Settings/PanelContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "UI Animation Speed"
+label_settings = ExtResource("6_653ys")
+
+[node name="ChangeUIAnimationSpeed" type="SpinBox" parent="Settings/PanelContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+min_value = 1.0
+max_value = 4.0
+value = 1.0
+
+[node name="Label4" type="Label" parent="Settings/PanelContainer/VBoxContainer"]
 layout_mode = 2
 horizontal_alignment = 1
 
 [node name="CustomBtn" parent="Settings/PanelContainer/VBoxContainer" instance=ExtResource("10_d5ocq")]
 custom_minimum_size = Vector2(650, 156)
 layout_mode = 2
-label = "Exit"
+label = "Close"
 variant = 1
+
+[node name="FPSLabel" type="Label" parent="."]
+offset_left = 47.0
+offset_top = 993.0
+offset_right = 176.0
+offset_bottom = 1035.0
+text = "FPS: 60"
+label_settings = ExtResource("6_653ys")
+script = ExtResource("11_bgj4p")

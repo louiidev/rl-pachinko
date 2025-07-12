@@ -1,13 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://u7v0v200hk8j"]
+[gd_scene load_steps=5 format=3 uid="uid://u7v0v200hk8j"]
 
-[ext_resource type="Script" uid="uid://bsibv76dojy8c" path="res://scripts/custom_button.gd" id="1_o3kr4"]
+[ext_resource type="Theme" uid="uid://du2jkyh4el8aw" path="res://ui/GameSceneTheme.tres" id="1_5beik"]
+[ext_resource type="Script" uid="uid://di71ky785s3rn" path="res://scripts/prestige_warning.gd" id="2_higq1"]
+[ext_resource type="LabelSettings" uid="uid://dcrxj6ropvsma" path="res://ui/LabelSettings/GameUILabelSettings.tres" id="2_k5nck"]
+[ext_resource type="PackedScene" uid="uid://bnom3ilambl0v" path="res://prefabs/CustomButton.tscn" id="2_mgiqs"]
 
 [node name="PrestigeWarning" type="CenterContainer"]
-visible = false
 offset_right = 1920.0
 offset_bottom = 1080.0
+theme = ExtResource("1_5beik")
+script = ExtResource("2_higq1")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 2
+color = Color(0, 0, 0, 0.192157)
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
@@ -15,16 +25,33 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
-text = "Testing"
+text = "WARNING!"
+label_settings = ExtResource("2_k5nck")
+horizontal_alignment = 1
 
-[node name="CustomBtn" type="Control" parent="PanelContainer/VBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
+[node name="Label2" type="Label" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
-script = ExtResource("1_o3kr4")
-label = "HEllo"
-metadata/_custom_type_script = "uid://bsibv76dojy8c"
+text = "Prestige will clear all current upgrades"
+label_settings = ExtResource("2_k5nck")
+horizontal_alignment = 1
 
-[node name="CustomBtn2" type="Control" parent="PanelContainer/VBoxContainer"]
+[node name="Label3" type="Label" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
-script = ExtResource("1_o3kr4")
-metadata/_custom_type_script = "uid://bsibv76dojy8c"
+label_settings = ExtResource("2_k5nck")
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Cancel" parent="PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("2_mgiqs")]
+custom_minimum_size = Vector2(550, 156)
+layout_mode = 2
+label = "Cancel"
+variant = 1
+size_variant = null
+
+[node name="Proceed" parent="PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("2_mgiqs")]
+custom_minimum_size = Vector2(550, 156)
+layout_mode = 2
+label = "Proceed"
+size_variant = null

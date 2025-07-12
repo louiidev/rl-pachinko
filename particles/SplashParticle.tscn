@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://dxv7ls1cc5fy8"]
+
+[ext_resource type="Texture2D" uid="uid://boavsmeu3gnbn" path="res://sprites/splash.png" id="1_g3ex1"]
+
+[sub_resource type="Curve" id="Curve_g3ex1"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.577922), -0.714797, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_0s3v0"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.954802, 0), -3.31519, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_pehft"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_8ffkp"]
+curve_x = SubResource("Curve_g3ex1")
+curve_y = SubResource("Curve_0s3v0")
+curve_z = SubResource("Curve_pehft")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pehft"]
+particle_flag_align_y = true
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(0, 0, 0)
+emission_shape = 1
+emission_sphere_radius = 3.0
+inherit_velocity_ratio = 10.0
+velocity_pivot = Vector3(1, 1, 1)
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 73.08
+initial_velocity_max = 150.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.9
+scale_max = 2.5
+scale_curve = SubResource("CurveXYZTexture_8ffkp")
+
+[node name="SplashParticle" type="GPUParticles2D"]
+amount = 5
+texture = ExtResource("1_g3ex1")
+lifetime = 0.5
+explosiveness = 0.62
+randomness = 0.4
+process_material = SubResource("ParticleProcessMaterial_pehft")

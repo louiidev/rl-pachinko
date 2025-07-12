@@ -15,6 +15,5 @@ func _process(_delta: float) -> void:
 	
 	
 func play_pachinko():	
-	Game.tokens = 0
 	Game.request_sfx(AudioLibrary.SoundFxs.Click)
 	Game.change_to_pachinko_scene()

@@ -1,0 +1,407 @@
+[gd_scene load_steps=19 format=3 uid="uid://4r8qvx2odoep"]
+
+[ext_resource type="Script" uid="uid://ba4823pre2yl7" path="res://scripts/pachinko.gd" id="1_6jjps"]
+[ext_resource type="Theme" uid="uid://ccse0vwtvn6ah" path="res://ui/PachinkoBoardUI/PachinkoBoardTheme.tres" id="2_6jjps"]
+[ext_resource type="Theme" uid="uid://du2jkyh4el8aw" path="res://ui/GameSceneTheme.tres" id="2_q1bj0"]
+[ext_resource type="LabelSettings" uid="uid://cpd6oxhesfn23" path="res://ui/LabelSettings/GameUISmallLabel.tres" id="3_vnxsl"]
+[ext_resource type="LabelSettings" uid="uid://bes17kcturhvb" path="res://ui/PachinkoBoardUI/LabelSettings.tres" id="5_6jjps"]
+[ext_resource type="PackedScene" uid="uid://ddceknw0yy6ty" path="res://prefabs/Board.tscn" id="7_6eq1x"]
+[ext_resource type="LabelSettings" uid="uid://dcrxj6ropvsma" path="res://ui/LabelSettings/GameUILabelSettings.tres" id="7_gag3b"]
+[ext_resource type="PackedScene" uid="uid://bnom3ilambl0v" path="res://prefabs/CustomButton.tscn" id="7_w7mv3"]
+[ext_resource type="Script" uid="uid://i0ncmvapuued" path="res://scripts/audio/audio_library.gd" id="8_ioama"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l1krn"]
+content_margin_left = 30.0
+content_margin_top = 30.0
+content_margin_right = 30.0
+content_margin_bottom = 30.0
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 5
+shadow_offset = Vector2(5, 5)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f1bna"]
+content_margin_left = 40.0
+content_margin_top = 40.0
+content_margin_right = 40.0
+content_margin_bottom = 20.0
+bg_color = Color(0.176144, 0.186503, 0.182959, 1)
+
+[sub_resource type="Theme" id="Theme_6jjps"]
+Panel/styles/panel = SubResource("StyleBoxFlat_l1krn")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_f1bna")
+VBoxContainer/constants/separation = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gag3b"]
+content_margin_left = 30.0
+content_margin_top = 50.0
+content_margin_right = 30.0
+content_margin_bottom = 50.0
+bg_color = Color(0.349433, 0.451053, 0.990182, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 10
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 5
+shadow_offset = Vector2(5, 5)
+anti_aliasing = false
+anti_aliasing_size = 0.01
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6jjps"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.133333, 0.133333, 0.133333, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 5
+shadow_offset = Vector2(5, 5)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q1bj0"]
+content_margin_left = 22.0
+content_margin_top = 40.0
+content_margin_right = 22.0
+content_margin_bottom = 40.0
+bg_color = Color(0, 0.459516, 0.873525, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(5, 5)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vnxsl"]
+content_margin_left = 22.0
+content_margin_top = 40.0
+content_margin_right = 22.0
+content_margin_bottom = 40.0
+bg_color = Color(1, 0.215686, 0.215686, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(5, 5)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_415iy"]
+content_margin_left = 10.0
+content_margin_top = 20.0
+content_margin_right = 10.0
+content_margin_bottom = 20.0
+bg_color = Color(0.180392, 0.188235, 0.184314, 1)
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(5, 5)
+anti_aliasing = false
+
+[sub_resource type="Environment" id="Environment_jlsqs"]
+background_mode = 3
+glow_enabled = true
+glow_blend_mode = 1
+
+[node name="Pachinko" type="Node2D"]
+process_mode = 1
+script = ExtResource("1_6jjps")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="UI"]
+custom_minimum_size = Vector2(0, 1080)
+layout_mode = 0
+offset_right = 464.0
+offset_bottom = 1080.0
+theme = SubResource("Theme_6jjps")
+
+[node name="GameInfo" type="VBoxContainer" parent="UI/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme = ExtResource("2_6jjps")
+
+[node name="Panel" type="Panel" parent="UI/PanelContainer/GameInfo"]
+custom_minimum_size = Vector2(0, 130)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gag3b")
+
+[node name="Name" type="Label" parent="UI/PanelContainer/GameInfo/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -132.0
+offset_top = -30.0
+offset_right = 132.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "PACHINCRO!"
+label_settings = ExtResource("7_gag3b")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimeLeftPanel" type="Panel" parent="UI/PanelContainer/GameInfo"]
+custom_minimum_size = Vector2(0, 130)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6jjps")
+
+[node name="TimeLeft" type="Label" parent="UI/PanelContainer/GameInfo/TimeLeftPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -30.0
+offset_right = 128.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "TIMELEFT: 0s"
+label_settings = ExtResource("5_6jjps")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TargetPanel" type="Panel" parent="UI/PanelContainer/GameInfo"]
+custom_minimum_size = Vector2(0, 130)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6jjps")
+
+[node name="Target" type="Label" parent="UI/PanelContainer/GameInfo/TargetPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -30.0
+offset_right = 128.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "TARGET: $100M"
+label_settings = ExtResource("5_6jjps")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MoneyThisRoundPanel" type="PanelContainer" parent="UI/PanelContainer/GameInfo"]
+custom_minimum_size = Vector2(0, 130)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6jjps")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/PanelContainer/GameInfo/MoneyThisRoundPanel"]
+custom_minimum_size = Vector2(240, 100)
+layout_mode = 2
+
+[node name="RoundScore" type="Label" parent="UI/PanelContainer/GameInfo/MoneyThisRoundPanel/HBoxContainer"]
+layout_mode = 2
+text = "ROUND
+SCORE"
+label_settings = ExtResource("3_vnxsl")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Panel3" type="PanelContainer" parent="UI/PanelContainer/GameInfo/MoneyThisRoundPanel/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_q1bj0")
+
+[node name="MoneyThisRound" type="Label" parent="UI/PanelContainer/GameInfo/MoneyThisRoundPanel/HBoxContainer/Panel3"]
+layout_mode = 2
+text = "$100m"
+label_settings = ExtResource("3_vnxsl")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RoundScore2" type="Label" parent="UI/PanelContainer/GameInfo/MoneyThisRoundPanel/HBoxContainer"]
+layout_mode = 2
+text = "X"
+label_settings = ExtResource("3_vnxsl")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Panel4" type="PanelContainer" parent="UI/PanelContainer/GameInfo/MoneyThisRoundPanel/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_vnxsl")
+
+[node name="MoneyMultiplier" type="Label" parent="UI/PanelContainer/GameInfo/MoneyThisRoundPanel/HBoxContainer/Panel4"]
+layout_mode = 2
+text = "100M"
+label_settings = ExtResource("3_vnxsl")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/PanelContainer/GameInfo"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="MoneyPanel" type="PanelContainer" parent="UI/PanelContainer/GameInfo/HBoxContainer"]
+custom_minimum_size = Vector2(0, 130)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6jjps")
+
+[node name="HBoxContainer" type="VBoxContainer" parent="UI/PanelContainer/GameInfo/HBoxContainer/MoneyPanel"]
+custom_minimum_size = Vector2(170, 100)
+layout_mode = 2
+
+[node name="RoundScore" type="Label" parent="UI/PanelContainer/GameInfo/HBoxContainer/MoneyPanel/HBoxContainer"]
+z_index = 1
+layout_mode = 2
+text = "MONEY"
+label_settings = ExtResource("5_6jjps")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Panel3" type="PanelContainer" parent="UI/PanelContainer/GameInfo/HBoxContainer/MoneyPanel/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_415iy")
+
+[node name="Money" type="Label" parent="UI/PanelContainer/GameInfo/HBoxContainer/MoneyPanel/HBoxContainer/Panel3"]
+layout_mode = 2
+text = "$500M"
+label_settings = ExtResource("5_6jjps")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelPanel" type="PanelContainer" parent="UI/PanelContainer/GameInfo/HBoxContainer"]
+custom_minimum_size = Vector2(0, 130)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6jjps")
+
+[node name="HBoxContainer" type="VBoxContainer" parent="UI/PanelContainer/GameInfo/HBoxContainer/LevelPanel"]
+custom_minimum_size = Vector2(170, 100)
+layout_mode = 2
+
+[node name="RoundScore" type="Label" parent="UI/PanelContainer/GameInfo/HBoxContainer/LevelPanel/HBoxContainer"]
+layout_mode = 2
+text = "LEVEL"
+label_settings = ExtResource("5_6jjps")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Panel3" type="PanelContainer" parent="UI/PanelContainer/GameInfo/HBoxContainer/LevelPanel/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_415iy")
+
+[node name="LevelValue" type="Label" parent="UI/PanelContainer/GameInfo/HBoxContainer/LevelPanel/HBoxContainer/Panel3"]
+layout_mode = 2
+text = "100"
+label_settings = ExtResource("5_6jjps")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Options" parent="UI/PanelContainer/GameInfo" instance=ExtResource("7_w7mv3")]
+custom_minimum_size = Vector2(200, 156)
+layout_mode = 2
+size_flags_horizontal = 4
+label = "Options"
+variant = 1
+size_variant = 1
+
+[node name="Board" parent="." instance=ExtResource("7_6eq1x")]
+position = Vector2(172, 30)
+
+[node name="BallsContainer" type="Node2D" parent="."]
+
+[node name="SfxPlayer" type="AudioStreamPlayer2D" parent="."]
+bus = &"Sfx"
+script = ExtResource("8_ioama")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_jlsqs")
+
+[node name="MoneyContainer" type="Node2D" parent="."]
+
+[node name="RoundOverContainer" type="CenterContainer" parent="."]
+process_mode = 3
+visible = false
+z_index = 100
+custom_minimum_size = Vector2(1920, 1080)
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("2_q1bj0")
+
+[node name="ColorRect" type="ColorRect" parent="RoundOverContainer"]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 2
+color = Color(0, 0, 0, 0.341176)
+
+[node name="Control" type="Control" parent="RoundOverContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="RoundOverContainer/Control"]
+custom_minimum_size = Vector2(800, 0)
+layout_mode = 2
+offset_left = -615.0
+offset_top = -207.0
+offset_right = 615.0
+offset_bottom = 207.0
+pivot_offset = Vector2(615, 209)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RoundOverContainer/Control/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="RoundOverContainer/Control/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "ROUND OVER!"
+label_settings = ExtResource("7_gag3b")
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="RoundOverContainer/Control/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Target of $50 was missed, you earned $20 this round"
+label_settings = ExtResource("3_vnxsl")
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="RoundOverContainer/Control/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Upgrades" parent="RoundOverContainer/Control/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("7_w7mv3")]
+custom_minimum_size = Vector2(550, 156)
+layout_mode = 2
+label = "UPRADES"
+variant = 1
+
+[node name="PlayAgain" parent="RoundOverContainer/Control/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("7_w7mv3")]
+custom_minimum_size = Vector2(550, 156)
+layout_mode = 2
+label = "PLAY AGAIN"
+
+[node name="Timer" type="Timer" parent="RoundOverContainer"]
+process_mode = 3
+wait_time = 0.2

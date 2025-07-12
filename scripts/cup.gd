@@ -6,12 +6,12 @@ extends Node2D
 @onready var token: Sprite2D = $Token
 
 
-signal on_ball_collected(reward_amount: int, global_position: Vector2, ball_type: Ball.BallType, ball_variant: Ball.BallVariant)
+signal on_ball_collected(reward_amount: float, global_position: Vector2, ball_type: Ball.BallType, ball_variant: Ball.BallVariant)
 signal on_ball_collected_no_prize()
 signal on_ball_collected_token()
 
 var claimed_amount: int = 0
-var prize: int = 0
+var prize: float = 0
 var has_token = false
 var max_claim_amount: int
 
@@ -20,20 +20,16 @@ func _ready() -> void:
 	max_claim_amount = 1 + Game.get_upgrade_current_level(Game.Upgrades.PrizesCanBeClaimedXTimes)
 	label.modulate = Color.WHITE
 	label.text = "$0"
-
-func set_prize(prize_amount: int = 0):
+	
+func set_prize(prize_amount: float = 0):
 	claimed_amount = 0
-	if prize_amount == 0:
-		var max_level_reward = Game.get_current_level_base_reward() + ceili(Game.get_current_level_base_reward() * Game.get_upgrade_current_value(Game.Upgrades.MaxRewardAmountPercentage))
-		prize = Game.rng.randi_range(1, max_level_reward)
-		
+	prize = Game.get_current_level_base_reward() + float(Game.get_current_level_base_reward()) *  float(Game.get_upgrade_current_value(Game.Upgrades.MaxRewardAmountPercentage))
+	
 	label.visible = true
-	if prize_amount < 0:
-		label.modulate = Color.RED
-		label.text = "-$" + str(abs(prize))
-	else:
-		label.modulate = Color.WHITE
-		label.text = "$" + str(prize)
+
+	label.modulate = Color.WHITE
+	var display_prize_text: String = "%0.2f" % prize
+	label.text = "+" + display_prize_text + "x"
 		
 	
 func set_token():

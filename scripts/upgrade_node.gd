@@ -57,17 +57,19 @@ func show_next_nodes(build_lines_always: bool = false):
 		if !is_upgrade_node_instance(child):
 			continue
 		var node: UpgradeNode = child
-		if Game.is_upgrade_money_per_second(node.upgrade) && Game.get_upgrade_current_level(upgrade) == Game.get_upgrade_max_level(upgrade) || !Game.is_upgrade_money_per_second(node.upgrade):
-			if !child.visible || build_lines_always:
-				child.show()
-				var line = Line2D.new()
-				line.z_index = -2
-				line.width = 2.0
-				line.add_point(Vector2.ZERO)
-				line.add_point(child.position)
-				self.add_child.call_deferred(line)
-		else:
+		if Game.is_upgrade_money_per_second(upgrade) && Game.is_upgrade_money_per_second(node.upgrade) && Game.get_upgrade_current_level(upgrade) < Game.get_upgrade_max_level(upgrade):
 			node.hide()
+			continue
+		if !child.visible || build_lines_always:
+			child.show()
+			var line = Line2D.new()
+			line.z_index = -2
+			line.width = 2.0
+			line.add_point(Vector2.ZERO)
+			line.add_point(child.position)
+			self.add_child.call_deferred(line)
+		
+			
 
 func is_upgrade_node_instance(node: Node) -> bool:
 	return node.get_script() != null && node.get_script().get_global_name() == "UpgradeNode"

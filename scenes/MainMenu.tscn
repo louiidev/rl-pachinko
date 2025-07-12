@@ -49,8 +49,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="Menu/VBoxContainer"]
 layout_mode = 2
-text = "INCRO
-PACHINKO"
+text = "PACHINCRO!"
 label_settings = SubResource("LabelSettings_2wh52")
 horizontal_alignment = 1
 
@@ -63,9 +62,10 @@ label = "LOAD GAME"
 
 [node name="StartBtn" parent="Menu/VBoxContainer" instance=ExtResource("4_826wr")]
 layout_mode = 2
-label = "START GAME"
+label = "START NEW GAME"
 
 [node name="OptionsBtn" parent="Menu/VBoxContainer" instance=ExtResource("4_826wr")]
+custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 label = "OPTIONS"
 variant = 1

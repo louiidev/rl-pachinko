@@ -10,7 +10,7 @@ extends Node2D
 @onready var option_btn: CustomBtn = $Menu/VBoxContainer/OptionsBtn
 
 func _ready() -> void:
-	RenderingServer.set_default_clear_color(Color.html("#222034"))
+	
 
 	timer.timeout.connect(spawn_ball)
 	start_btn.button.pressed.connect(Game.change_to_pachinko_scene)
@@ -20,7 +20,7 @@ func _ready() -> void:
 
 func load_game():
 	Game.load_save()
-	Game.change_to_pachinko_scene()
+	Game.change_to_upgrades_scene()
 
 func show_options():
 	Input.action_press("settings")

@@ -7,8 +7,9 @@ func _ready() -> void:
 	tween.tween_property(self, "scale", Vector2(0.1, 0.1), 2.0)
 	await tween.finished
 	self.queue_free()
-func _process(delta: float) -> void:
-	position+= Vector2.UP * delta * 140
+func _process(_delta: float) -> void:
+	
+	position+= Vector2.UP * Game.game_dt * 140
 
 
 

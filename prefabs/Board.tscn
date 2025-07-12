@@ -27,9 +27,9 @@ position = Vector2(415, 318)
 script = ExtResource("3_vh7qr")
 peg_scene = ExtResource("4_u6leh")
 pegs_per_column = 10
-num_rows = 6
+num_rows = 7
 horizontal_spacing = 140.0
-vertical_spacing = 100.0
+vertical_spacing = 90.0
 
 [node name="Floor" type="StaticBody2D" parent="."]
 position = Vector2(-8, 155)

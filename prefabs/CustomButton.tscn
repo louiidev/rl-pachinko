@@ -22,27 +22,16 @@ border_width_bottom = 10
 border_color = Color(1, 1, 1, 1)
 corner_detail = 1
 
-[node name="CustomBtn" type="Control"]
+[node name="CustomBtn" type="CenterContainer"]
 custom_minimum_size = Vector2(100, 156)
-layout_mode = 3
-anchors_preset = 0
+offset_right = 500.0
+offset_bottom = 156.0
 theme = ExtResource("1_p6aqw")
 script = ExtResource("2_h345s")
 
 [node name="Button" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -78.0
-offset_right = 250.0
-offset_bottom = 78.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(320, 80)
+custom_minimum_size = Vector2(500, 156)
+layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_41g6t")
 theme_override_styles/disabled = ExtResource("3_04esp")
 theme_override_styles/hover = ExtResource("1_j7fmd")

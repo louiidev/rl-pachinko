@@ -9,6 +9,7 @@ bounce = 0.68
 size = Vector2(66, 1381.5)
 
 [node name="StaticBody2D" type="StaticBody2D"]
+visible = false
 physics_material_override = SubResource("PhysicsMaterial_l6igm")
 
 [node name="Wall" type="Sprite2D" parent="."]
