@@ -20,9 +20,9 @@ func on_fire():
 	tween.set_ease(Tween.EASE_IN)
 	tween.set_trans(Tween.TRANS_ELASTIC)
 	await tween.finished
-	tween_scale_indicator(Game.get_upgrade_current_value(Game.Upgrades.AutoDropperRate) - 0.3)
+	tween_scale_indicator(Game.get_cannon_firerate() - 0.3)
 
-func tween_scale_indicator(tween_time: float = Game.get_upgrade_current_value(Game.Upgrades.AutoDropperRate)):
+func tween_scale_indicator(tween_time: float = Game.get_cannon_firerate()):
 	var tween = create_tween()
 	tween.tween_property(self, "circle_arc_end", 360, tween_time)
 	

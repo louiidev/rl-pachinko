@@ -1,22 +1,18 @@
-[gd_scene load_steps=19 format=3 uid="uid://brvtevyeux5rm"]
+[gd_scene load_steps=15 format=3 uid="uid://brvtevyeux5rm"]
 
 [ext_resource type="Script" uid="uid://xrlwmi7jowag" path="res://scripts/prestige_scene.gd" id="1_t1ktp"]
 [ext_resource type="PackedScene" uid="uid://cmqq5tee3t843" path="res://prefabs/UpgradeNode.tscn" id="2_fpi2r"]
 [ext_resource type="Texture2D" uid="uid://f1oqhb7bqccq" path="res://icons/magic-balls.png" id="3_nrupn"]
 [ext_resource type="Texture2D" uid="uid://cgngbhqswoxqc" path="res://icons/ticket.png" id="4_gys6d"]
-[ext_resource type="Texture2D" uid="uid://bclh2le8ol7my" path="res://icons/max-prize-percentage-amount.png" id="6_rulid"]
 [ext_resource type="Texture2D" uid="uid://chlb3n35yq7hm" path="res://icons/cannon-plus-1.png" id="7_4u7hf"]
-[ext_resource type="Texture2D" uid="uid://2n66gux860ds" path="res://icons/pegs-prize-claimed-amount.png" id="7_jpl1e"]
 [ext_resource type="Texture2D" uid="uid://da72x02o23p7q" path="res://icons/mini-balls.png" id="8_q6rye"]
 [ext_resource type="Texture2D" uid="uid://ctxumdqc41mo5" path="res://icons/double-money-earned.png" id="9_k677y"]
 [ext_resource type="Texture2D" uid="uid://5o0p7pnu4sl0" path="res://icons/triple-money-earned.png" id="10_yeml4"]
 [ext_resource type="Texture2D" uid="uid://mp5ca1feeap1" path="res://icons/quad-money-earned.png" id="11_h1bg3"]
 [ext_resource type="Texture2D" uid="uid://cpb5me21ldg2e" path="res://icons/prizes-claimed-amount.png" id="12_36cdx"]
-[ext_resource type="Texture2D" uid="uid://cm2qtqr3qqv1j" path="res://icons/max-tokens.png" id="14_36cdx"]
+[ext_resource type="PackedScene" uid="uid://bnom3ilambl0v" path="res://prefabs/CustomButton.tscn" id="13_4u7hf"]
 [ext_resource type="Theme" uid="uid://du2jkyh4el8aw" path="res://ui/GameSceneTheme.tres" id="31_4mkk5"]
 [ext_resource type="LabelSettings" uid="uid://dcrxj6ropvsma" path="res://ui/LabelSettings/GameUILabelSettings.tres" id="32_qrlka"]
-[ext_resource type="Script" uid="uid://cik52rhd1w27g" path="res://scripts/button_shaker.gd" id="34_aq6w3"]
-[ext_resource type="Script" uid="uid://bttbimes54k4a" path="res://scripts/ui_shaker.gd" id="35_jjpss"]
 [ext_resource type="LabelSettings" uid="uid://cpd6oxhesfn23" path="res://ui/LabelSettings/GameUISmallLabel.tres" id="36_bkh2h"]
 
 [node name="Prestige" type="Node2D"]
@@ -32,37 +28,27 @@ offset_bottom = 1298.0
 mouse_filter = 1
 
 [node name="DoubleMoney" parent="UpgradeNodes" instance=ExtResource("2_fpi2r")]
-upgrade = 31
+upgrade = 29
 texture = ExtResource("9_k677y")
 
 [node name="TripleMoney2" parent="UpgradeNodes/DoubleMoney" instance=ExtResource("2_fpi2r")]
 position = Vector2(0, 120)
-upgrade = 32
+upgrade = 30
 texture = ExtResource("10_yeml4")
 
 [node name="QuadtrupleMoney" parent="UpgradeNodes/DoubleMoney/TripleMoney2" instance=ExtResource("2_fpi2r")]
 position = Vector2(0, 120)
-upgrade = 33
+upgrade = 31
 texture = ExtResource("11_h1bg3")
-
-[node name="PrizesAlwaysRespawn" parent="UpgradeNodes/DoubleMoney" instance=ExtResource("2_fpi2r")]
-position = Vector2(120, 0)
-upgrade = 43
-texture = ExtResource("6_rulid")
-
-[node name="PegsAlwaysRespawn" parent="UpgradeNodes/DoubleMoney/PrizesAlwaysRespawn" instance=ExtResource("2_fpi2r")]
-position = Vector2(120, 0)
-upgrade = 44
-texture = ExtResource("7_jpl1e")
 
 [node name="MagicBalls" parent="UpgradeNodes/DoubleMoney" instance=ExtResource("2_fpi2r")]
 position = Vector2(-120, 0)
-upgrade = 34
+upgrade = 32
 texture = ExtResource("3_nrupn")
 
 [node name="MiniBalls" parent="UpgradeNodes/DoubleMoney/MagicBalls" instance=ExtResource("2_fpi2r")]
 position = Vector2(0, 120)
-upgrade = 35
+upgrade = 33
 texture = ExtResource("8_q6rye")
 
 [node name="BaseLevelValueX" parent="UpgradeNodes/DoubleMoney/MagicBalls" instance=ExtResource("2_fpi2r")]
@@ -72,17 +58,12 @@ texture = ExtResource("12_36cdx")
 
 [node name="KeepMoneyOn" parent="UpgradeNodes/DoubleMoney/MagicBalls/BaseLevelValueX" instance=ExtResource("2_fpi2r")]
 position = Vector2(-120, 0)
-upgrade = 40
+upgrade = 36
 texture = ExtResource("4_gys6d")
-
-[node name="KeepUpgradesOnP" parent="UpgradeNodes/DoubleMoney/MagicBalls/BaseLevelValueX/KeepMoneyOn" instance=ExtResource("2_fpi2r")]
-position = Vector2(-120, 0)
-upgrade = 41
-texture = ExtResource("14_36cdx")
 
 [node name="ExtraCannon" parent="UpgradeNodes/DoubleMoney" instance=ExtResource("2_fpi2r")]
 position = Vector2(0, -120)
-upgrade = 39
+upgrade = 35
 texture = ExtResource("7_4u7hf")
 
 [node name="UI" type="Control" parent="."]
@@ -110,51 +91,23 @@ offset_top = 860.0
 offset_right = 1921.0
 offset_bottom = 1079.0
 
-[node name="Control" type="Control" parent="UI/CenterContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/CenterContainer2"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="UI/CenterContainer2/Control"]
+[node name="Cancel" parent="UI/CenterContainer2/HBoxContainer" instance=ExtResource("13_4u7hf")]
 layout_mode = 2
-offset_left = -198.0
-offset_top = -85.0
-offset_right = 197.0
-offset_bottom = 85.0
-pivot_offset = Vector2(194, 78)
-mouse_default_cursor_shape = 2
-text = "PACHINKO!"
-script = ExtResource("34_aq6w3")
+label = "Cancel"
 
-[node name="Label" type="Label" parent="UI/CenterContainer2/Control/Button"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -147.5
-offset_top = -35.0
-offset_right = 147.5
-offset_bottom = 35.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "PACHINKO!"
-label_settings = ExtResource("32_qrlka")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Shaker" type="Control" parent="UI/CenterContainer2/Control/Button" node_paths=PackedStringArray("target")]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("35_jjpss")
-target = NodePath("..")
+[node name="Confirm" parent="UI/CenterContainer2/HBoxContainer" instance=ExtResource("13_4u7hf")]
+layout_mode = 2
+label = "Confirm Prestige"
+variant = 1
 
 [node name="CenterContainer3" type="CenterContainer" parent="UI"]
 layout_mode = 0
-offset_left = 239.0
+offset_left = -26.0
 offset_top = 860.0
-offset_right = 759.0
+offset_right = 494.0
 offset_bottom = 1079.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/CenterContainer3"]
@@ -167,10 +120,10 @@ label_settings = ExtResource("36_bkh2h")
 
 [node name="CenterContainer4" type="CenterContainer" parent="UI"]
 layout_mode = 0
-offset_left = 1161.0
-offset_top = 860.0
-offset_right = 1681.0
-offset_bottom = 1079.0
+offset_left = 1463.0
+offset_top = 859.0
+offset_right = 1983.0
+offset_bottom = 1078.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/CenterContainer4"]
 layout_mode = 2

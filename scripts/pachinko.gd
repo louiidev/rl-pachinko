@@ -34,7 +34,6 @@ extends Node2D
 
 var id_counter: int = 0
 var multiplier: float = 1.0
-var time_left: float = 25
 var target: float = 0
 var queue_restart: bool = false
 
@@ -48,12 +47,18 @@ func replay_btn_pressed() -> void:
 	Game.change_to_pachinko_scene()
 
 
+func open_options():
+	Input.action_press("settings")
+	pass
+
 func _ready() -> void:
 	setup_level()
+	Game.time_left = Game.get_start_level_time()
 	Game.money_this_round = 0
 	upgrade_btn.button.pressed.connect(upgrade_btn_pressed)
 	play_again_btn.button.pressed.connect(replay_btn_pressed)
 	options_btn.set_custom_width(game_info_container.size.x)
+	options_btn.button.pressed.connect(open_options)
 	money_this_round_label.text = "$0"
 	level_label.text = str(Game.level)
 	multiplier_label.text = str(multiplier)
@@ -76,8 +81,6 @@ func quick_reset_btn():
 
 
 func upgrades_scene_btn():
-	print("upgrades")
-
 	Game.request_sfx(AudioLibrary.SoundFxs.Click)
 	Game.change_to_upgrades_scene()
 
@@ -97,9 +100,9 @@ func ball_hit_peg(ball_global_pos: Vector2, volumn_db: float, peg_dead: bool):
 		money_container.add_child.call_deferred(money)
 		money.call_deferred("set_value", Game.level)
 
-func spawn_peg_prize(prize: float,position: Vector2):
+func spawn_peg_prize(prize: float, position: Vector2):
 	var money: MoneyDrop = money_prefab.instantiate()
-	money.global_position = position
+	money.global_position = position + Vector2(0, -40)
 	money_container.add_child.call_deferred(money)
 	money.call_deferred("set_value", prize)
 
@@ -183,10 +186,7 @@ func on_ball_collected_token(g_position: Vector2):
 		PopupManager.new_token_text(g_position)
 
 func cup_claimed_ball(reward_amount: float, g_position: Vector2, ball_type: Ball.BallType, ball_variant_type: Ball.BallVariant):
-	print(reward_amount)
 	var upgrade_amount:= Ball.get_ball_upgrade_amount(ball_type, ball_variant_type, reward_amount)
-	print("UGPRADE amt")
-	print(upgrade_amount)
 	sfx_player.play_sfx(AudioLibrary.SoundFxs.PrizeClaimed)
 	multiplier+= upgrade_amount
 	multiplier_label.text = str(multiplier)
@@ -222,9 +222,9 @@ func spawn_ball():
 		var ball: RigidBody2D = ball_scene.instantiate()
 		balls_container.call_deferred("add_child", ball)
 		ball.call_deferred("spawn")
-		var rotation_deg: float = cannon.rotation_degrees
+		var rotation_deg: float = cannon.rotation_degrees + Game.rng.randf_range(-2, 2)
 		ball.apply_impulse(Vector2.from_angle(deg_to_rad(rotation_deg + 90)) * (750 + (abs(rotation_deg) * 0.5)))
-		ball.global_position = cannon.cannon_spawn_point.global_position
+		ball.global_position = cannon.cannon_spawn_point.global_position + Vector2(Game.rng.randf_range(-4, 4), 0)
 		ball.id = id_counter
 		id_counter+= 1
 
@@ -243,12 +243,14 @@ func reset_board():
 	setup_level()
 
 
-var autodrop_rate:= Game.get_upgrade_current_value(Game.Upgrades.AutoDropperRate)
+var autodrop_rate:= Game.get_cannon_firerate()
 
 var has_fired_missed_target:= false
+var has_started_time_left_timer: =false
 func _process(_delta: float) -> void:
-	time_left-= Game.game_dt
-	var formatted_time_left = max(time_left, 0)
+	if has_started_time_left_timer:
+		Game.time_left-= Game.game_dt
+	var formatted_time_left = max(Game.time_left, 0)
 	var display_time_left_text: String = "%0.2f" % formatted_time_left
 	time_left_label.text = "TIMELEFT: " + display_time_left_text + "s"
 
@@ -256,8 +258,9 @@ func _process(_delta: float) -> void:
 	money_this_round_label.text = "$" + Game.format_number_precise(Game.money_this_round)
 	autodrop_rate-= Game.game_dt
 	if autodrop_rate <= 0.0:
-		autodrop_rate = Game.get_upgrade_current_value(Game.Upgrades.AutoDropperRate)
+		autodrop_rate = Game.get_cannon_firerate()
 		spawn_ball()
+		has_started_time_left_timer = true
 
 
 
@@ -265,7 +268,7 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("restart"):
 		Game.change_to_pachinko_scene()
 
-	if time_left <= 0:
+	if Game.time_left <= 0:
 		if !has_fired_missed_target:
 			has_fired_missed_target = true
 			var score: float = multiplier * Game.money_this_round
@@ -280,8 +283,14 @@ func _process(_delta: float) -> void:
 				round_over_text.text = "Missed target of $"+Game.format_number_precise(target)+ "\nScore was: $"+ Game.format_number_precise(score)
 			else:
 				Game.level+= 1
-				round_over_text.text = "You scored $"+ Game.format_number_precise(score) + ", Bonus: $" + Game.format_number_precise(Game.calculate_bonus())
-
+				var bonus_type: = Game.get_level_bonus_type()
+				if bonus_type == Game.LevelBonus.Token:
+					round_over_text.text = "You scored $"+ Game.format_number_precise(score) + ", Bonus: 1 Token"
+					Game.tokens+=1
+				else:
+					var bonus:= Game.calculate_bonus()
+					round_over_text.text = "You scored $"+ Game.format_number_precise(score) + ", Bonus: $" + Game.format_number_precise(bonus)
+					Game.money+= bonus
 			var tween:= create_tween()
 			round_over_panel.scale = Vector2.ZERO
 			round_over_container.show()

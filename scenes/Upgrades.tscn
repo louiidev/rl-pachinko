@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://cvsftdpu2pmus"]
+[gd_scene load_steps=35 format=3 uid="uid://cvsftdpu2pmus"]
 
 [ext_resource type="PackedScene" uid="uid://cmqq5tee3t843" path="res://prefabs/UpgradeNode.tscn" id="1_db6p7"]
 [ext_resource type="Script" uid="uid://do5jhdpambdu" path="res://scripts/upgrades_scene.gd" id="1_o3c8l"]
@@ -9,34 +9,28 @@
 [ext_resource type="Script" uid="uid://cik52rhd1w27g" path="res://scripts/button_shaker.gd" id="4_jtjne"]
 [ext_resource type="Script" uid="uid://bttbimes54k4a" path="res://scripts/ui_shaker.gd" id="4_os0qy"]
 [ext_resource type="Texture2D" uid="uid://cgngbhqswoxqc" path="res://icons/ticket.png" id="4_yxxwd"]
-[ext_resource type="Texture2D" uid="uid://cm2qtqr3qqv1j" path="res://icons/max-tokens.png" id="5_4us53"]
 [ext_resource type="Texture2D" uid="uid://bak7a3w4dnkou" path="res://icons/extra-balls.png" id="8_42ycr"]
 [ext_resource type="Texture2D" uid="uid://d21285ecfpxf7" path="res://customer.png" id="8_jwdw3"]
 [ext_resource type="Texture2D" uid="uid://b3rwrf5e1p7i4" path="res://icons/auto-dropper-down.png" id="8_x5oev"]
 [ext_resource type="Texture2D" uid="uid://x1g18ke04r4f" path="res://icons/potatochip_green.png" id="9_qk3q1"]
-[ext_resource type="Texture2D" uid="uid://cpb5me21ldg2e" path="res://icons/prizes-claimed-amount.png" id="10_4jcny"]
-[ext_resource type="Texture2D" uid="uid://2n66gux860ds" path="res://icons/pegs-prize-claimed-amount.png" id="10_hxoeu"]
 [ext_resource type="Texture2D" uid="uid://ctp2mcn56qkna" path="res://icons/decor.png" id="10_iypik"]
 [ext_resource type="Texture2D" uid="uid://kmk6lsjoka3u" path="res://icons/bronzeballs.png" id="10_t60i8"]
-[ext_resource type="Texture2D" uid="uid://cihdt41avsnfo" path="res://icons/pegs-can-have-prizes.png" id="10_ynu60"]
 [ext_resource type="Texture2D" uid="uid://djipi0a1i21ru" path="res://icons/silverballs.png" id="11_aoq7x"]
 [ext_resource type="Texture2D" uid="uid://cl7hijhhqyo6c" path="res://icons/pegs-prize-amount.png" id="11_mgk3p"]
 [ext_resource type="Texture2D" uid="uid://clvs23glv334r" path="res://icons/vip.png" id="11_s5gr3"]
-[ext_resource type="Texture2D" uid="uid://ewa2xmccu6ka" path="res://icons/chance-respawn-ball.png" id="11_y7x7c"]
 [ext_resource type="Texture2D" uid="uid://jris4ysmxbms" path="res://icons/goldballs.png" id="12_1lmaf"]
 [ext_resource type="Texture2D" uid="uid://bdis3c3http3j" path="res://icons/shiny-balls.png" id="12_85hqe"]
 [ext_resource type="Texture2D" uid="uid://cayah2v38qk1l" path="res://icons/new-machines.png" id="12_o53fm"]
 [ext_resource type="Texture2D" uid="uid://bo05trpdo44vu" path="res://icons/diamondballs.png" id="13_qk3q1"]
-[ext_resource type="Texture2D" uid="uid://bclh2le8ol7my" path="res://icons/max-prize-percentage-amount.png" id="14_dbmu8"]
 [ext_resource type="Texture2D" uid="uid://bb0epj3jqdvo3" path="res://icons/platballs.png" id="14_iypik"]
-[ext_resource type="Texture2D" uid="uid://bnvanjgr7b838" path="res://icons/chance-to-split-ball-peg.png" id="15_bk4jg"]
 [ext_resource type="Texture2D" uid="uid://ds760r6rvdyq4" path="res://icons/bronze-balls-effect-pegs.png" id="15_o75u6"]
-[ext_resource type="Texture2D" uid="uid://bmvjcgxn2q2rw" path="res://icons/plus-min-rewards-per-level.png" id="17_hrb1w"]
-[ext_resource type="Texture2D" uid="uid://dxjuocts1e2ip" path="res://icons/chance-ball-spawns-on-miss.png" id="20_1lmaf"]
+[ext_resource type="Texture2D" uid="uid://cihdt41avsnfo" path="res://icons/pegs-can-have-prizes.png" id="16_6mg3w"]
+[ext_resource type="Texture2D" uid="uid://2n66gux860ds" path="res://icons/pegs-prize-claimed-amount.png" id="18_o85pm"]
 [ext_resource type="Texture2D" uid="uid://cuhxy3yehhxut" path="res://icons/gold-balls-effect-pegs.png" id="20_jjanr"]
 [ext_resource type="Texture2D" uid="uid://c3c21yjnphnkg" path="res://icons/plat-balls-effect-pegs.png" id="20_o85pm"]
 [ext_resource type="Texture2D" uid="uid://bpq1t3w1w75cn" path="res://icons/silver-balls-effect-pegs.png" id="20_sdi2j"]
 [ext_resource type="Texture2D" uid="uid://cripu4bhuf1qf" path="res://icons/diamond-balls-effect-pegs.png" id="21_yxxwd"]
+[ext_resource type="Texture2D" uid="uid://cm2qtqr3qqv1j" path="res://icons/max-tokens.png" id="23_o85pm"]
 [ext_resource type="StyleBox" uid="uid://c0y242nrsahb3" path="res://ui/DefaultBtnHover.tres" id="33_hkxu2"]
 [ext_resource type="PackedScene" uid="uid://u7v0v200hk8j" path="res://prefabs/prestige_warning.tscn" id="36_e3ule"]
 
@@ -56,162 +50,188 @@ corner_detail = 1
 [node name="Upgrades" type="Node2D"]
 script = ExtResource("1_o3c8l")
 
-[node name="UpgradeNodes" type="Control" parent="."]
+[node name="UpgradeNodes2" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 974.0
-offset_top = 498.0
-offset_right = 2474.0
-offset_bottom = 1298.0
+offset_left = 960.0
+offset_top = 538.0
+offset_right = 2460.0
+offset_bottom = 1338.0
 mouse_filter = 1
 
-[node name="MinDmg" parent="UpgradeNodes" instance=ExtResource("1_db6p7")]
-upgrade = 45
+[node name="DmgUpV1" parent="UpgradeNodes2" instance=ExtResource("1_db6p7")]
+upgrade = 38
 texture = ExtResource("3_x5oev")
 
-[node name="auto dropper rate" parent="UpgradeNodes/MinDmg" instance=ExtResource("1_db6p7")]
+[node name="MaxBallBounceV1" parent="UpgradeNodes2/DmgUpV1" instance=ExtResource("1_db6p7")]
 position = Vector2(0, -120)
-upgrade = 37
-texture = ExtResource("8_x5oev")
-
-[node name="Tokens2" parent="UpgradeNodes/MinDmg" instance=ExtResource("1_db6p7")]
-position = Vector2(-120, 0)
-upgrade = 16
-texture = ExtResource("4_yxxwd")
-
-[node name="MaxTokens" parent="UpgradeNodes/MinDmg/Tokens2" instance=ExtResource("1_db6p7")]
-position = Vector2(-120, 0)
-upgrade = 28
-texture = ExtResource("5_4us53")
-
-[node name="Balls Per Game" parent="UpgradeNodes/MinDmg" instance=ExtResource("1_db6p7")]
-position = Vector2(120, 0)
 upgrade = 2
 texture = ExtResource("8_42ycr")
 
-[node name="Pegs Can Have prizes Percetange" parent="UpgradeNodes/MinDmg/Balls Per Game" instance=ExtResource("1_db6p7")]
-position = Vector2(120, 0)
-upgrade = 4
-texture = ExtResource("10_ynu60")
-
-[node name="Pegs prize amount" parent="UpgradeNodes/MinDmg/Balls Per Game/Pegs Can Have prizes Percetange" instance=ExtResource("1_db6p7")]
-position = Vector2(120, 0)
-upgrade = 5
-texture = ExtResource("11_mgk3p")
-
-[node name="Prizes claimed X per peg" parent="UpgradeNodes/MinDmg/Balls Per Game/Pegs Can Have prizes Percetange/Pegs prize amount" instance=ExtResource("1_db6p7")]
-position = Vector2(120, 0)
-upgrade = 7
-texture = ExtResource("10_hxoeu")
-
-[node name="Chance To Split Ball on Peg" parent="UpgradeNodes/MinDmg/Balls Per Game/Pegs Can Have prizes Percetange/Pegs prize amount/Prizes claimed X per peg" instance=ExtResource("1_db6p7")]
-position = Vector2(120, 0)
-upgrade = 10
-texture = ExtResource("15_bk4jg")
-
-[node name="BronzeBalls" parent="UpgradeNodes/MinDmg/Balls Per Game" instance=ExtResource("1_db6p7")]
+[node name="ShotDelayV1" parent="UpgradeNodes2/DmgUpV1/MaxBallBounceV1" instance=ExtResource("1_db6p7")]
 position = Vector2(0, -120)
+upgrade = 34
+texture = ExtResource("8_x5oev")
+
+[node name="BronzeBalls" parent="UpgradeNodes2/DmgUpV1/MaxBallBounceV1/ShotDelayV1" instance=ExtResource("1_db6p7")]
+position = Vector2(120, 0)
 upgrade = 11
 texture = ExtResource("10_t60i8")
 
-[node name="BronzeBallsEffectPegs" parent="UpgradeNodes/MinDmg/Balls Per Game/BronzeBalls" instance=ExtResource("1_db6p7")]
+[node name="BronzeBallsEffectPegs" parent="UpgradeNodes2/DmgUpV1/MaxBallBounceV1/ShotDelayV1/BronzeBalls" instance=ExtResource("1_db6p7")]
 position = Vector2(0, -120)
 upgrade = 23
 texture = ExtResource("15_o75u6")
 
-[node name="SilverBalls" parent="UpgradeNodes/MinDmg/Balls Per Game/BronzeBalls" instance=ExtResource("1_db6p7")]
+[node name="SilverBalls" parent="UpgradeNodes2/DmgUpV1/MaxBallBounceV1/ShotDelayV1/BronzeBalls" instance=ExtResource("1_db6p7")]
 position = Vector2(120, 0)
 upgrade = 12
 texture = ExtResource("11_aoq7x")
 
-[node name="GoldBalls" parent="UpgradeNodes/MinDmg/Balls Per Game/BronzeBalls/SilverBalls" instance=ExtResource("1_db6p7")]
+[node name="GoldBalls" parent="UpgradeNodes2/DmgUpV1/MaxBallBounceV1/ShotDelayV1/BronzeBalls/SilverBalls" instance=ExtResource("1_db6p7")]
 position = Vector2(120, 0)
 upgrade = 13
 texture = ExtResource("12_1lmaf")
 
-[node name="DiamondBalls" parent="UpgradeNodes/MinDmg/Balls Per Game/BronzeBalls/SilverBalls/GoldBalls" instance=ExtResource("1_db6p7")]
+[node name="DiamondBalls" parent="UpgradeNodes2/DmgUpV1/MaxBallBounceV1/ShotDelayV1/BronzeBalls/SilverBalls/GoldBalls" instance=ExtResource("1_db6p7")]
 position = Vector2(120, 0)
 upgrade = 14
 texture = ExtResource("13_qk3q1")
 
-[node name="PlatBalls" parent="UpgradeNodes/MinDmg/Balls Per Game/BronzeBalls/SilverBalls/GoldBalls/DiamondBalls" instance=ExtResource("1_db6p7")]
+[node name="PlatBalls" parent="UpgradeNodes2/DmgUpV1/MaxBallBounceV1/ShotDelayV1/BronzeBalls/SilverBalls/GoldBalls/DiamondBalls" instance=ExtResource("1_db6p7")]
 position = Vector2(120, 0)
 upgrade = 15
 texture = ExtResource("14_iypik")
 
-[node name="PlatBallsEffectPegs" parent="UpgradeNodes/MinDmg/Balls Per Game/BronzeBalls/SilverBalls/GoldBalls/DiamondBalls/PlatBalls" instance=ExtResource("1_db6p7")]
+[node name="PlatBallsEffectPegs" parent="UpgradeNodes2/DmgUpV1/MaxBallBounceV1/ShotDelayV1/BronzeBalls/SilverBalls/GoldBalls/DiamondBalls/PlatBalls" instance=ExtResource("1_db6p7")]
 position = Vector2(0, -120)
 upgrade = 27
 texture = ExtResource("20_o85pm")
 
-[node name="DiamondBallsEffectPegs" parent="UpgradeNodes/MinDmg/Balls Per Game/BronzeBalls/SilverBalls/GoldBalls/DiamondBalls" instance=ExtResource("1_db6p7")]
+[node name="DiamondBallsEffectPegs" parent="UpgradeNodes2/DmgUpV1/MaxBallBounceV1/ShotDelayV1/BronzeBalls/SilverBalls/GoldBalls/DiamondBalls" instance=ExtResource("1_db6p7")]
 position = Vector2(0, -120)
 upgrade = 26
 texture = ExtResource("21_yxxwd")
 
-[node name="GoldBallsEffectPegs" parent="UpgradeNodes/MinDmg/Balls Per Game/BronzeBalls/SilverBalls/GoldBalls" instance=ExtResource("1_db6p7")]
+[node name="GoldBallsEffectPegs" parent="UpgradeNodes2/DmgUpV1/MaxBallBounceV1/ShotDelayV1/BronzeBalls/SilverBalls/GoldBalls" instance=ExtResource("1_db6p7")]
 position = Vector2(0, -120)
 upgrade = 25
 texture = ExtResource("20_jjanr")
 
-[node name="SilverBallsEffectPEgs" parent="UpgradeNodes/MinDmg/Balls Per Game/BronzeBalls/SilverBalls" instance=ExtResource("1_db6p7")]
+[node name="SilverBallsEffectPEgs" parent="UpgradeNodes2/DmgUpV1/MaxBallBounceV1/ShotDelayV1/BronzeBalls/SilverBalls" instance=ExtResource("1_db6p7")]
 position = Vector2(0, -120)
 upgrade = 24
 texture = ExtResource("20_sdi2j")
 
-[node name="Max Level Reward" parent="UpgradeNodes/MinDmg/Balls Per Game" instance=ExtResource("1_db6p7")]
+[node name="MaxBallBounceV2" parent="UpgradeNodes2/DmgUpV1/MaxBallBounceV1" instance=ExtResource("1_db6p7")]
+position = Vector2(120, 0)
+upgrade = 52
+texture = ExtResource("8_42ycr")
+
+[node name="PegsCanHavePrizes" parent="UpgradeNodes2/DmgUpV1/MaxBallBounceV1/MaxBallBounceV2" instance=ExtResource("1_db6p7")]
+position = Vector2(120, 0)
+upgrade = 4
+texture = ExtResource("16_6mg3w")
+
+[node name="PegsCanHavePrizes2" parent="UpgradeNodes2/DmgUpV1/MaxBallBounceV1/MaxBallBounceV2/PegsCanHavePrizes" instance=ExtResource("1_db6p7")]
+position = Vector2(120, 0)
+upgrade = 5
+texture = ExtResource("11_mgk3p")
+
+[node name="PrizesCanBeClaimedXTimesPerPeg" parent="UpgradeNodes2/DmgUpV1/MaxBallBounceV1/MaxBallBounceV2/PegsCanHavePrizes" instance=ExtResource("1_db6p7")]
 position = Vector2(0, 120)
-texture = ExtResource("14_dbmu8")
+upgrade = 7
+texture = ExtResource("18_o85pm")
 
-[node name="Balls Respawn on miss" parent="UpgradeNodes/MinDmg/Balls Per Game/Max Level Reward" instance=ExtResource("1_db6p7")]
+[node name="PickupRadiusV1" parent="UpgradeNodes2/DmgUpV1" instance=ExtResource("1_db6p7")]
 position = Vector2(120, 0)
-upgrade = 8
-texture = ExtResource("20_1lmaf")
+upgrade = 44
+texture = ExtResource("8_42ycr")
 
-[node name="Min Rewards Per Level" parent="UpgradeNodes/MinDmg/Balls Per Game/Max Level Reward/Balls Respawn on miss" instance=ExtResource("1_db6p7")]
-position = Vector2(120, 0)
-upgrade = 1
-texture = ExtResource("17_hrb1w")
-
-[node name="Prizes Can Be claimed multiple times" parent="UpgradeNodes/MinDmg/Balls Per Game/Max Level Reward/Balls Respawn on miss/Min Rewards Per Level" instance=ExtResource("1_db6p7")]
-position = Vector2(120, 0)
-upgrade = 6
-texture = ExtResource("10_4jcny")
-
-[node name="Chance to spawn ball on prize claimed" parent="UpgradeNodes/MinDmg/Balls Per Game/Max Level Reward/Balls Respawn on miss/Min Rewards Per Level/Prizes Can Be claimed multiple times" instance=ExtResource("1_db6p7")]
-position = Vector2(120, 0)
-upgrade = 9
-texture = ExtResource("11_y7x7c")
-
-[node name="Customers" parent="UpgradeNodes/MinDmg" instance=ExtResource("1_db6p7")]
-position = Vector2(0, 120)
+[node name="Customers" parent="UpgradeNodes2/DmgUpV1" instance=ExtResource("1_db6p7")]
+position = Vector2(-120, 120)
 upgrade = 3
 texture = ExtResource("8_jwdw3")
 
-[node name="Free Snacks" parent="UpgradeNodes/MinDmg/Customers" instance=ExtResource("1_db6p7")]
+[node name="Free Snacks" parent="UpgradeNodes2/DmgUpV1/Customers" instance=ExtResource("1_db6p7")]
 position = Vector2(0, 120)
 upgrade = 17
 texture = ExtResource("9_qk3q1")
 
-[node name="DecorUpgrade" parent="UpgradeNodes/MinDmg/Customers/Free Snacks" instance=ExtResource("1_db6p7")]
-position = Vector2(0, 120)
+[node name="DecorUpgrade" parent="UpgradeNodes2/DmgUpV1/Customers/Free Snacks" instance=ExtResource("1_db6p7")]
+position = Vector2(-120, 0)
 upgrade = 18
 texture = ExtResource("10_iypik")
 
-[node name="VipLounge" parent="UpgradeNodes/MinDmg/Customers/Free Snacks/DecorUpgrade" instance=ExtResource("1_db6p7")]
+[node name="VipLounge" parent="UpgradeNodes2/DmgUpV1/Customers/Free Snacks/DecorUpgrade" instance=ExtResource("1_db6p7")]
 position = Vector2(-120, 0)
 upgrade = 20
 texture = ExtResource("11_s5gr3")
 
-[node name="ShinyBalls" parent="UpgradeNodes/MinDmg/Customers/Free Snacks/DecorUpgrade/VipLounge" instance=ExtResource("1_db6p7")]
+[node name="ShinyBalls" parent="UpgradeNodes2/DmgUpV1/Customers/Free Snacks/DecorUpgrade/VipLounge" instance=ExtResource("1_db6p7")]
 position = Vector2(-120, 0)
 upgrade = 21
 texture = ExtResource("12_85hqe")
 
-[node name="New Machines" parent="UpgradeNodes/MinDmg/Customers/Free Snacks/DecorUpgrade/VipLounge/ShinyBalls" instance=ExtResource("1_db6p7")]
+[node name="New Machines" parent="UpgradeNodes2/DmgUpV1/Customers/Free Snacks/DecorUpgrade/VipLounge/ShinyBalls" instance=ExtResource("1_db6p7")]
 position = Vector2(-120, 0)
 upgrade = 22
 texture = ExtResource("12_o53fm")
+
+[node name="MaxTokens" parent="UpgradeNodes2/DmgUpV1/Customers" instance=ExtResource("1_db6p7")]
+position = Vector2(-120, 0)
+upgrade = 28
+texture = ExtResource("23_o85pm")
+
+[node name="LevelTimeUpV1" parent="UpgradeNodes2/DmgUpV1" instance=ExtResource("1_db6p7")]
+position = Vector2(-120, 0)
+upgrade = 39
+texture = ExtResource("8_x5oev")
+
+[node name="PegsDestoryedAddsLevelTimeV1" parent="UpgradeNodes2/DmgUpV1/LevelTimeUpV1" instance=ExtResource("1_db6p7")]
+position = Vector2(0, -120)
+upgrade = 42
+texture = ExtResource("11_mgk3p")
+
+[node name="PegsDestoryedAddsLevelTimeV2" parent="UpgradeNodes2/DmgUpV1/LevelTimeUpV1/PegsDestoryedAddsLevelTimeV1" instance=ExtResource("1_db6p7")]
+position = Vector2(0, -120)
+upgrade = 40
+texture = ExtResource("8_x5oev")
+
+[node name="ShotDelayV2" parent="UpgradeNodes2/DmgUpV1/LevelTimeUpV1/PegsDestoryedAddsLevelTimeV1" instance=ExtResource("1_db6p7")]
+position = Vector2(-120, 0)
+upgrade = 50
+texture = ExtResource("8_x5oev")
+
+[node name="ShotDelayV3" parent="UpgradeNodes2/DmgUpV1/LevelTimeUpV1/PegsDestoryedAddsLevelTimeV1/ShotDelayV2" instance=ExtResource("1_db6p7")]
+position = Vector2(0, -120)
+upgrade = 51
+texture = ExtResource("8_x5oev")
+
+[node name="ShotDelayV4" parent="UpgradeNodes2/DmgUpV1/LevelTimeUpV1/PegsDestoryedAddsLevelTimeV1/ShotDelayV2/ShotDelayV3" instance=ExtResource("1_db6p7")]
+position = Vector2(-120, 0)
+upgrade = 43
+texture = ExtResource("11_mgk3p")
+
+[node name="ShotDelayV5" parent="UpgradeNodes2/DmgUpV1/LevelTimeUpV1/PegsDestoryedAddsLevelTimeV1/ShotDelayV2/ShotDelayV3/ShotDelayV4" instance=ExtResource("1_db6p7")]
+position = Vector2(0, 120)
+upgrade = 53
+texture = ExtResource("8_x5oev")
+
+[node name="AttackDmgV2" parent="UpgradeNodes2/DmgUpV1" instance=ExtResource("1_db6p7")]
+position = Vector2(0, 123)
+upgrade = 47
+texture = ExtResource("3_x5oev")
+
+[node name="CritChanceV1" parent="UpgradeNodes2/DmgUpV1/AttackDmgV2" instance=ExtResource("1_db6p7")]
+position = Vector2(120, 0)
+upgrade = 48
+texture = ExtResource("3_x5oev")
+
+[node name="CritChanceV2" parent="UpgradeNodes2/DmgUpV1/AttackDmgV2/CritChanceV1" instance=ExtResource("1_db6p7")]
+position = Vector2(120, 0)
+upgrade = 49
+texture = ExtResource("3_x5oev")
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

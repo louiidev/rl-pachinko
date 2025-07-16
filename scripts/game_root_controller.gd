@@ -46,6 +46,7 @@ func _ready() -> void:
 	settings_exit.button.pressed.connect(hide_settings)
 	Game.change_scene_request.connect(chance_scene_request)
 	current_scene_key = start_scene
+	
 func hide_transition():
 	await transition.end_transition()
 	get_tree().paused = false

@@ -53,13 +53,10 @@ func on_ball_entered(body: Node2D):
 			on_ball_collected_token.emit(global_position)
 		else:
 			on_ball_collected.emit(prize, global_position, ball.ball_type, ball.ball_variant)
-			
 			if claimed_amount >= max_claim_amount:
-				if Game.has_upgrade(Game.Upgrades.PrizesAlwaysRespawn):
-					set_prize()
+				label.visible = false
 					
-				else:
-					label.visible = false
+					
 				
 		
 	else:

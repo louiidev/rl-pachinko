@@ -41,13 +41,12 @@ var colors: Array = [
 
 func _ready() -> void:
 	var health_modifier = min(Game.level, 15)
-	peg_max_health = peg_health * health_modifier
+	peg_max_health = original_peg_health * health_modifier
 		
 	peg_health = peg_max_health
 	area.body_entered.connect(on_ball_hit)
 	
 	mask_container.material.set_shader_parameter("fill_percentage", 0.0)
-	#mask_container.material = mask_container.material.duplicate()
 
 func is_prize_active() -> bool:
 	return prize > 0 && claimed_amount < max_claim_amount
@@ -100,45 +99,62 @@ func on_ball_hit(body: Node):
 			
 
 			if claimed_amount >= max_claim_amount:
-				if Game.has_upgrade(Game.Upgrades.PegsAlwaysRespawn) && prize > 0:
-					set_prize()
-				else:
-					prize_label.hide()
-					sprite.modulate = colors[0]
-					prize_disabled = true
-					await get_tree().create_timer(0.8).timeout
-					prize_disabled = false
+				prize_label.hide()
+				sprite.modulate = colors[0]
+				prize_disabled = true
+				await get_tree().create_timer(0.8).timeout
+				prize_disabled = false
 
 
 
 
 func dmg_peg(dmg: float):
+	if prize > 0:
+		print("PRIZE PEG DMGd")
+		print(dmg, " ", peg_health)
 	peg_health-= dmg
 	if peg_health <= 0.0:
 		#        SPAWN PRIZE
+		if prize > 0:
+			print("PRIZE PEG KILLED")
 		queue_free()
 		ParticleManager.spawn_splash_particle(global_position)
+		Game.time_left+= Game.get_peg_add_time_amount()
 	else:
 		var ratio = 1.0 - (float(peg_health) / float(peg_max_health))
-		mask_container.material.set_shader_parameter("fill_percentage", ratio + 0.05)
-
-
-
+		mask_container.material.set_shader_parameter("fill_percentage", ratio)
 
 
 
 
 func set_prize():
+	
+		
+	
 		claimed_amount = 0
 
 		prize = float(Game.rng.randi_range(1, Game.level + ceili(1 * Game.Upgrades.PegsPrizeAmount)))
-		prize_label.text = "$" +str(prize)
+		var prize_label_amount: float = prize
+		if Game.has_upgrade(Game.Upgrades.QuadurpleMoneyEarned):
+			prize_label_amount = prize * 4
+		elif Game.has_upgrade(Game.Upgrades.TripleMoneyEarned):
+			prize_label_amount = prize * 3
+		elif Game.has_upgrade(Game.Upgrades.DoubleMoneyEarned):
+			prize_label_amount = prize * 2
+	
+		prize_label.text = "$" +str(prize_label_amount)
 		prize_label.show()
 		sprite.modulate = colors[clamp(Game.get_upgrade_current_level(Game.Upgrades.PrizesCanBeClaimedXTimesPerPeg) - claimed_amount, 0, colors.size() - 1)]
 		var health_modifier = min(Game.level, 15)
-		peg_max_health = peg_health * health_modifier * max_claim_amount
+		if Game.has_upgrade(Game.Upgrades.PegsCanHavePrizesSpawnPercetange):
+			max_claim_amount = max(Game.get_upgrade_current_level(Game.Upgrades.PrizesCanBeClaimedXTimesPerPeg) + 1, 1)
+		else:
+			print("NO UPGRADE ={")
+			max_claim_amount = 1
+		peg_max_health = original_peg_health * health_modifier * max_claim_amount
+		print("max_claim_amount", max_claim_amount)
+		
 		peg_health = peg_max_health
-		print("SET PEG HEALTH TO ", peg_health)
 
 func setup():
 	already_hit_ids = []
